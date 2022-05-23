@@ -4,6 +4,11 @@
 
 Este proyecto es el Trabajo de Fin de Master de [@MasterCloudApps](https://twitter.com/MasterCloudApps/).
 
+📓 [Memoria](./docs/Memoria.pdf)
+
+
+📽️ [Presentación](./docs/PRESENTACION.pdf)
+
 Se ha creado una transacción con micro servicios completa, punto a punto para un ficticio sistema de envío de comida a domicilio. El proyecto consta de:
 
 * Micro servicios desplegados en kubernetes usando kafka para comunicarse
