@@ -1,0 +1,78 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mongo-order-pv
+  namespace: cadsspace
+spec:
+  storageClassName: mongo-order-cn
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: "/mnt/mongo-order_db"
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mongo-order-pvc
+  namespace: cadsspace
+spec:
+  storageClassName: mongo-order-cn
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-order
+  namespace: cadsspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-order
+  template:
+    metadata:
+      labels:
+        app: mongo-order
+    spec:
+      terminationGracePeriodSeconds: 30
+
+      volumes:
+      - name: mongo-order-pv-storage
+        persistentVolumeClaim:
+          claimName: mongo-order-pvc
+
+      containers:
+      - name: mongo-order-cont
+        imagePullPolicy: Always
+        image: mongo:4.2
+        ports:
+        - containerPort: 27017
+        args: [ "--bind_ip_all", "--port", "27017" ]
+        volumeMounts:
+        - name: mongo-order-pv-storage
+          mountPath: /data/db
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-order-svc
+  namespace: cadsspace
+  labels:
+    app: mongo-order
+spec:
+  ports:
+  - port: 27017
+    name: mongo-order
+  clusterIP: None
+  selector:
+    app: mongo-order

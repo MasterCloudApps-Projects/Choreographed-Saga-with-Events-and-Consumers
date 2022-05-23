@@ -1,0 +1,255 @@
+#---
+#kind: PersistentVolume
+#apiVersion: v1
+#metadata:
+#  name: mongo1-pv
+#  namespace: cadsspace
+#spec:
+#  storageClassName: mongo1-cn
+#  accessModes:
+#  - ReadWriteOnce
+#  capacity:
+#    storage: 1Gi
+#  hostPath:
+#    path: "/mnt/mongo1_db"
+#
+#---
+#kind: PersistentVolumeClaim
+#apiVersion: v1
+#metadata:
+#  name: mongo1-pvc
+#  namespace: cadsspace
+#spec:
+#  storageClassName: mongo1-cn
+#  accessModes:
+#  - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 1Gi
+#
+#---
+#apiVersion: apps/v1
+#kind: StatefulSet
+#metadata:
+#  name: mongo1
+#  namespace: cadsspace
+#spec:
+#  serviceName: mongo1-svc
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: mongo1
+#  template:
+#    metadata:
+#      labels:
+#        app: mongo1
+#    spec:
+#      terminationGracePeriodSeconds: 30
+#
+#      volumes:
+#      - name: mongo1-pv-storage
+#        persistentVolumeClaim:
+#          claimName: mongo1-pvc
+#
+#      containers:
+#      - name: mongo1-cont
+#        imagePullPolicy: Always
+#        image: mongo:4.2
+#        ports:
+#        - containerPort: 27017
+#          name: mongo1
+#        args: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
+#        readinessProbe:
+#          initialDelaySeconds: 30
+#          periodSeconds: 10
+#          exec:
+#            command:
+#            - test
+#            - $(echo "rs.initiate({_id:'rs0',members:[{_id:0,host:\"mongo1-svc:27017\"},{_id:1,host:\"mongo2-svc:27017\"},{_id:2,host:\"mongo3-svc:27017\"}]}).ok || rs.status().ok" | mongo --quiet) -eq 1
+#        volumeMounts:
+#        - name: mongo1-pv-storage
+#          mountPath: /data/db
+#
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: mongo1-svc
+#  namespace: cadsspace
+#  labels:
+#    app: mongo1
+#spec:
+#  ports:
+#  - port: 27017
+#    name: mongo1
+#  clusterIP: None
+#  selector:
+#    app: mongo1
+#
+#
+#
+#---
+#kind: PersistentVolume
+#apiVersion: v1
+#metadata:
+#  name: mongo2-pv
+#  namespace: cadsspace
+#spec:
+#  storageClassName: mongo2-cn
+#  accessModes:
+#  - ReadWriteOnce
+#  capacity:
+#    storage: 1Gi
+#  hostPath:
+#    path: "/mnt/mongo2_db"
+#
+#---
+#kind: PersistentVolumeClaim
+#apiVersion: v1
+#metadata:
+#  name: mongo2-pvc
+#  namespace: cadsspace
+#spec:
+#  storageClassName: mongo2-cn
+#  accessModes:
+#  - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 1Gi
+#
+#---
+#apiVersion: apps/v1
+#kind: StatefulSet
+#metadata:
+#  name: mongo2
+#  namespace: cadsspace
+#spec:
+#  serviceName: mongo2-svc
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: mongo2
+#  template:
+#    metadata:
+#      labels:
+#        app: mongo2
+#    spec:
+#      terminationGracePeriodSeconds: 30
+#
+#      volumes:
+#      - name: mongo2-pv-storage
+#        persistentVolumeClaim:
+#          claimName: mongo2-pvc
+#
+#      containers:
+#      - name: mongo2-cont
+#        imagePullPolicy: Always
+#        image: mongo:4.2
+#        ports:
+#        - containerPort: 27017
+#          name: mongo2
+#        args: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
+#        volumeMounts:
+#        - name: mongo2-pv-storage
+#          mountPath: /data/db
+#
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: mongo2-svc
+#  namespace: cadsspace
+#  labels:
+#    app: mongo2
+#spec:
+#  ports:
+#  - port: 27017
+#    name: mongo2
+#  clusterIP: None
+#  selector:
+#    app: mongo2
+#
+#
+#
+#
+#
+#---
+#kind: PersistentVolume
+#apiVersion: v1
+#metadata:
+#  name: mongo3-pv
+#  namespace: cadsspace
+#spec:
+#  storageClassName: mongo3-cn
+#  accessModes:
+#  - ReadWriteOnce
+#  capacity:
+#    storage: 1Gi
+#  hostPath:
+#    path: "/mnt/mongo3_db"
+#
+#---
+#kind: PersistentVolumeClaim
+#apiVersion: v1
+#metadata:
+#  name: mongo3-pvc
+#  namespace: cadsspace
+#spec:
+#  storageClassName: mongo3-cn
+#  accessModes:
+#  - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 1Gi
+#
+#---
+#apiVersion: apps/v1
+#kind: StatefulSet
+#metadata:
+#  name: mongo3
+#  namespace: cadsspace
+#spec:
+#  serviceName: mongo3-svc
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: mongo3
+#  template:
+#    metadata:
+#      labels:
+#        app: mongo3
+#    spec:
+#      terminationGracePeriodSeconds: 30
+#
+#      volumes:
+#      - name: mongo3-pv-storage
+#        persistentVolumeClaim:
+#          claimName: mongo3-pvc
+#
+#      containers:
+#      - name: mongo3-cont
+#        imagePullPolicy: Always
+#        image: mongo:4.2
+#        ports:
+#        - containerPort: 27017
+#          name: mongo3
+#        args: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
+#        volumeMounts:
+#        - name: mongo3-pv-storage
+#          mountPath: /data/db
+#
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: mongo3-svc
+#  namespace: cadsspace
+#  labels:
+#    app: mongo3
+#spec:
+#  ports:
+#  - port: 27017
+#    name: mongo3
+#  clusterIP: None
+#  selector:
+#    app: mongo3

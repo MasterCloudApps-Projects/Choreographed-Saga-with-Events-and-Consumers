@@ -1,0 +1,187 @@
+version: "3.8"
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper
+    container_name: zookeeper
+    networks:
+      - localnet
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    image: confluentinc/cp-kafka:latest
+    hostname: broker
+    container_name: broker
+    depends_on:
+      - zookeeper
+    networks:
+      - localnet
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENERS: LISTENER_1://broker:29092,LISTENER_2://broker:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_1://broker:29092,LISTENER_2://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_1:PLAINTEXT,LISTENER_2:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      CONFLUENT_SUPPORT_CUSTOMER_ID: "anonymous"
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+
+  order:
+    image: sanguino/order:1.0.0
+    hostname: order
+    container_name: order
+    networks:
+      - localnet
+    restart: always
+    ports:
+      - "3030:3030"
+    environment:
+      KAFKA_BROKERS: "broker:29092"
+      MONGO_URL: "mongo1:30001,mongo2:30002,mongo3:30003"
+      MONGO_DB: "order?replicaSet=rs0"
+      API_REST_PORT: "3030"
+      DEBUG: "service:*"
+
+  restaurant:
+    image: sanguino/restaurant:1.0.0
+    hostname: restaurant
+    container_name: restaurant
+    networks:
+      - localnet
+    restart: always
+    environment:
+      KAFKA_BROKERS: "broker:29092"
+      MONGO_URL: "mongo1:30001,mongo2:30002,mongo3:30003"
+      MONGO_DB: "restaurant?replicaSet=rs0"
+      DEBUG: "*"
+      EXTERNALS_URL: "http://externals:3000/api/restaurant"
+
+  rider:
+    image: sanguino/rider:1.0.0
+    hostname: rider
+    container_name: rider
+    networks:
+      - localnet
+    restart: always
+    environment:
+      KAFKA_BROKERS: "broker:29092"
+      MONGO_URL: "mongo1:30001,mongo2:30002,mongo3:30003"
+      MONGO_DB: "rider?replicaSet=rs0"
+      DEBUG: "*"
+      EXTERNALS_URL: "http://externals:3000/api/rider"
+
+  payment:
+    image: sanguino/payment:1.0.0
+    hostname: payment
+    container_name: payment
+    networks:
+      - localnet
+    restart: always
+    environment:
+      KAFKA_BROKERS: "broker:29092"
+      MONGO_URL: "mongo1:30001,mongo2:30002,mongo3:30003"
+      MONGO_DB: "payment?replicaSet=rs0"
+      DEBUG: "*"
+      EXTERNALS_URL: "http://externals:3000/api/payment"
+
+  externals:
+    image: sanguino/externals:1.0.0
+    hostname: externals
+    container_name: externals
+    networks:
+      - localnet
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      API_REST_PORT: "3000"
+      DEBUG: "*"
+
+  notifications:
+    image: sanguino/notifications:1.0.0
+    hostname: notifications
+    container_name: notifications
+    networks:
+      - localnet
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      API_REST_PORT: "3001"
+      DEBUG: "*"
+
+  front:
+    image: sanguino/front:1.0.0
+    hostname: front
+    container_name: front
+    networks:
+      - localnet
+    restart: always
+    ports:
+      - "8888:8888"
+    environment:
+      KAFKA_BROKERS: "broker:29092"
+      API_REST_PORT: "8888"
+      ORDER_URL: "http://order:3030/api/order"
+      NOTIFICATIONS_URL: "http://notifications:3001/api/notifications"
+      DEBUG: "server:*,kafka:*"
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:master
+    hostname: kafka-ui
+    container_name: kafka-ui
+    networks:
+      - localnet
+    depends_on:
+      - broker
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:29092
+    ports:
+    - "8080:8080"
+
+  mongo1:
+    image: mongo:4.2
+    container_name: mongo1
+    hostname: mongo1
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "30001" ]
+    networks:
+      - localnet
+    ports:
+      - 30001:30001
+    healthcheck:
+      test: test $$(echo "rs.initiate({_id:'rs0',members:[{_id:0,host:\"mongo1:30001\"},{_id:1,host:\"mongo2:30002\"},{_id:2,host:\"mongo3:30003\"}]}).ok || rs.status().ok" | mongo --port 30001 --quiet) -eq 1
+      interval: 10s
+      start_period: 30s
+
+  mongo2:
+    image: mongo:4.2
+    container_name: mongo2
+    hostname: mongo2
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "30002" ]
+    networks:
+      - localnet
+    ports:
+      - 30002:30002
+
+  mongo3:
+    image: mongo:4.2
+    container_name: mongo3
+    hostname: mongo3
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "30003" ]
+    networks:
+      - localnet
+    ports:
+      - 30003:30003
+
+networks:
+  localnet:
+    attachable: true

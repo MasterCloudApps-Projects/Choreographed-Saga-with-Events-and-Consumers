@@ -1,0 +1,107 @@
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: zoo-pv
+  namespace: cadsspace
+spec:
+  storageClassName: zoo-cn
+  capacity:
+    storage: 100Mi
+  accessModes:
+  - ReadWriteOnce
+  hostPath:
+    path: "/mnt/zoo_data"
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: zoo-pvc
+  namespace: cadsspace
+spec:
+  storageClassName: zoo-cn
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zoo
+  namespace: cadsspace
+spec:
+  serviceName: zoo-svc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zoo
+  template:
+    metadata:
+      labels:
+        app: zoo
+    spec:
+
+      volumes:
+      - name: zoo-pv-storage
+        persistentVolumeClaim:
+          claimName: zoo-pvc
+
+      containers:
+      - name: zoo-cont
+        imagePullPolicy: Always
+        image: confluentinc/cp-zookeeper:latest
+        command:
+        - "bash"
+        - "-c"
+        - "ZOOKEEPER_SERVER_ID=$((${HOSTNAME:3}+1)) && /etc/confluent/docker/run"
+        ports:
+        - containerPort: 2181
+          name: client
+        - containerPort: 2888
+          name: server
+        - containerPort: 3888
+          name: leader-election
+        env:
+        - name : ZOOKEEPER_TICK_TIME
+          value: "2000"
+        - name : ZOOKEEPER_SYNC_LIMIT
+          value: "2000"
+        - name : ZOOKEEPER_SERVERS
+          value: "zoo-0.zoo-svc.cadsspace.svc.cluster.local:2888:3888"
+        - name: ZOOKEEPER_CLIENT_PORT
+          value: "2181"
+        - name: ZOOKEEPER_SERVER_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        volumeMounts:
+        - name: zoo-pv-storage
+          mountPath: /var/lib/zookeeper
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: zoo-svc
+  namespace: cadsspace
+  labels:
+    app: zoo
+spec:
+  ports:
+  - port: 2181
+    name: client
+  - port: 2888
+    name: server
+  - port: 3888
+    name: leader-election
+  clusterIP: None
+  selector:
+    app: zoo

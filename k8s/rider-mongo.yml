@@ -1,0 +1,78 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mongo-rider-pv
+  namespace: cadsspace
+spec:
+  storageClassName: mongo-rider-cn
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: "/mnt/mongo-rider_db"
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mongo-rider-pvc
+  namespace: cadsspace
+spec:
+  storageClassName: mongo-rider-cn
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-rider
+  namespace: cadsspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-rider
+  template:
+    metadata:
+      labels:
+        app: mongo-rider
+    spec:
+      terminationGracePeriodSeconds: 30
+
+      volumes:
+      - name: mongo-rider-pv-storage
+        persistentVolumeClaim:
+          claimName: mongo-rider-pvc
+
+      containers:
+      - name: mongo-rider-cont
+        imagePullPolicy: Always
+        image: mongo:4.2
+        ports:
+        - containerPort: 27017
+        args: [ "--bind_ip_all", "--port", "27017" ]
+        volumeMounts:
+        - name: mongo-rider-pv-storage
+          mountPath: /data/db
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-rider-svc
+  namespace: cadsspace
+  labels:
+    app: mongo-rider
+spec:
+  ports:
+  - port: 27017
+    name: mongo-rider
+  clusterIP: None
+  selector:
+    app: mongo-rider

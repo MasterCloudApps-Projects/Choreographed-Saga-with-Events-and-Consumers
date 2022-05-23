@@ -1,0 +1,19 @@
+{
+  "testFiles": "**/*.{feature,features}",
+  "ignoreTestFiles": ["*.js"],
+  "reporter": "cypress-multi-reporters",
+  "video": true,
+  "screenshotsFolder": "cypress/screenshots",
+  "reporterOptions": {
+    "reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
+    "mochaJunitReporterReporterOptions": {
+      "mochaFile": "cypress/reports/junit/results-[hash].xml"
+    },
+    "cypressMochawesomeReporterReporterOptions": {
+      "embeddedScreenshots": true,
+      "enableCode": false,
+      "charts": true,
+      "reportPageTitle": "CADS Test Report"
+    }
+  }
+}

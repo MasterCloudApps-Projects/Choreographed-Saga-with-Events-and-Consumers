@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant
+  namespace: cadsspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restaurant
+  template:
+    metadata:
+      labels:
+        app: restaurant
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: restaurant-cont
+        imagePullPolicy: Always
+        image: sanguino/restaurant:1.0.0
+        env:
+        - name: KAFKA_BROKERS
+          value: kafka-svc:9092
+        - name: MONGO_URL
+          value: mongo-restaurant-svc:27017
+        - name: MONGO_DB
+          value: restaurant
+        - name: EXTERNALS_URL
+          value: http://externals-svc:8080/api/restaurant
+        - name: DEBUG
+          value: "*"
+

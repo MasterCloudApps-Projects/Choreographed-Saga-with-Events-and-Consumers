@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment
+  namespace: cadsspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: payment-cont
+        imagePullPolicy: Always
+        image: sanguino/payment:1.0.0
+        env:
+        - name: KAFKA_BROKERS
+          value: kafka-svc:9092
+        - name: MONGO_URL
+          value: mongo-payment-svc:27017
+        - name: MONGO_DB
+          value: payment
+        - name: EXTERNALS_URL
+          value: http://externals-svc:8080/api/payment
+        - name: DEBUG
+          value: "*"
+

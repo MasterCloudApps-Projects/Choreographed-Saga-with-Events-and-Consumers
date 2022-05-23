@@ -1,0 +1,36 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^9.5.3",
+    "cypress-cucumber-preprocessor": "^4.3.1",
+    "cypress-dotenv": "^2.0.0",
+    "cypress-mochawesome-reporter": "^3.0.1",
+    "cypress-mongodb": "^2.1.3",
+    "cypress-multi-reporters": "^1.6.0",
+    "dotenv": "^16.0.1",
+    "mocha-junit-reporter": "^2.0.2",
+    "mochawesome": "^7.1.3",
+    "mongodb": "^4.6.0",
+    "mongoose": "^6.3.3",
+    "multiple-cucumber-html-reporter": "^1.20.0"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "cypress/reports/cucumber-json",
+      "filePrefix": "",
+      "fileSuffix": ".cucumber"
+    }
+  },
+  "scripts": {
+    "cy:run": "cypress run --spec \"./cypress/integration/**/*.feature\"",
+    "postcy:run": "node cucumber-report-generator.js",
+    "cy:open": "cypress open"
+  }
+}

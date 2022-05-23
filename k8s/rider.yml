@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rider
+  namespace: cadsspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rider
+  template:
+    metadata:
+      labels:
+        app: rider
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: rider-cont
+        imagePullPolicy: Always
+        image: sanguino/rider:1.0.0
+        env:
+        - name: KAFKA_BROKERS
+          value: kafka-svc:9092
+        - name: MONGO_URL
+          value: mongo-rider-svc:27017
+        - name: MONGO_DB
+          value: rider
+        - name: EXTERNALS_URL
+          value: http://externals-svc:8080/api/rider
+        - name: DEBUG
+          value: "*"
+

@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-svc
+  namespace: cadsspace
+  labels:
+    app: order
+spec:
+  type: NodePort
+  selector:
+    app: order
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: order-port
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order
+  namespace: cadsspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order
+  template:
+    metadata:
+      labels:
+        app: order
+    spec:
+      terminationGracePeriodSeconds: 300
+      containers:
+      - name: order-cont
+        imagePullPolicy: Always
+        image: sanguino/order:1.0.0
+        ports:
+        - containerPort: 8080
+          name: rest
+        env:
+        - name: API_REST_PORT
+          value: "8080"
+        - name: KAFKA_BROKERS
+          value: kafka-svc:9092
+        - name: MONGO_URL
+          value: mongo-order-svc:27017
+        - name: MONGO_DB
+          value: order
+        - name: DEBUG
+          value: "service:*"
+

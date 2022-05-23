@@ -1,0 +1,78 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mongo-payment-pv
+  namespace: cadsspace
+spec:
+  storageClassName: mongo-payment-cn
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: "/mnt/mongo-payment_db"
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mongo-payment-pvc
+  namespace: cadsspace
+spec:
+  storageClassName: mongo-payment-cn
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-payment
+  namespace: cadsspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-payment
+  template:
+    metadata:
+      labels:
+        app: mongo-payment
+    spec:
+      terminationGracePeriodSeconds: 30
+
+      volumes:
+      - name: mongo-payment-pv-storage
+        persistentVolumeClaim:
+          claimName: mongo-payment-pvc
+
+      containers:
+      - name: mongo-payment-cont
+        imagePullPolicy: Always
+        image: mongo:4.2
+        ports:
+        - containerPort: 27017
+        args: [ "--bind_ip_all", "--port", "27017" ]
+        volumeMounts:
+        - name: mongo-payment-pv-storage
+          mountPath: /data/db
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-payment-svc
+  namespace: cadsspace
+  labels:
+    app: mongo-payment
+spec:
+  ports:
+  - port: 27017
+    name: mongo-payment
+  clusterIP: None
+  selector:
+    app: mongo-payment

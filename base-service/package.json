@@ -1,0 +1,26 @@
+{
+  "name": "@sanguino/tfm-base-service",
+  "repository": "git://github.com/sanguino/TFM.git",
+  "version": "1.1.4",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node -r dotenv/config src/server.js",
+    "watch": "nodemon -r dotenv/config src/server.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/sanguino"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^4.3.2",
+    "kafkajs": "^1.17.0-beta.5",
+    "mongoose": "^6.0.12"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./src/Server.js"
+  }
+}

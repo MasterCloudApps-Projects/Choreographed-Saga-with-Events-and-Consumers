@@ -1,0 +1,19 @@
+{
+  "name": "restaurant",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node -r dotenv/config src/server.js",
+    "watch": "nodemon -r dotenv/config src/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sanguino/tfm-base-service": "1.1.4",
+    "dotenv": "^10.0.0",
+    "got": "^12.0.3"
+  },
+  "type": "module"
+}
