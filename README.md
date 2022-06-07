@@ -1,6 +1,6 @@
 # Orchestrated-Saga-with-Events-and-Consumers
 
-![](./imgs/home.png)
+![](./docs/home.png)
 
 Este proyecto es el Trabajo de Fin de Master de [@MasterCloudApps](https://twitter.com/MasterCloudApps/).
 
@@ -137,9 +137,9 @@ El último paso de los test es comprobar que los estados en base de datos son co
 Para que cypress pueda acceder desde los test a los mongo, se deben exponer los puertos de los 3 mongodb:
 
 ```bash
-kubectl port-forward service/mongo-restaurant-svc 27017:27017 --namespace cadsspace &
-kubectl port-forward service/mongo-rider-svc 27018:27017 --namespace cadsspace &
-kubectl port-forward service/mongo-payment-svc 27019:27017 --namespace cadsspace &
+kubectl port-forward service/mongo-restaurant-svc 27017:27017 --namespace sanguino &
+kubectl port-forward service/mongo-rider-svc 27018:27017 --namespace sanguino &
+kubectl port-forward service/mongo-payment-svc 27019:27017 --namespace sanguino &
 ```
 
 > otra opción algo más cómoda es hacerlo desde [Lens](https://k8slens.dev/)
