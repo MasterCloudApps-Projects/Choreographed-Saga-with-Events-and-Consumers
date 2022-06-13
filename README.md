@@ -1,4 +1,4 @@
-# Orchestrated-Saga-with-Events-and-Consumers
+# Choreographed-Saga-with-Events-and-Consumers
 
 ![](./docs/home.png)
 
