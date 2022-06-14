@@ -155,38 +155,50 @@ theme: cads-theme
 
 ---
 
-### middleware
+## Stack middleware
 
-- modular
-- servicios independientes
+- Kubernetes
+- Kafka
+- BBDD mongo
+- Nodejs
+- kafkajs
+- express
+- mongoose
+
+![bg left](middle_stack.drawio.png)
+
+---
+### Flujo middleware
+
+- 1 punto de entrada, independiente del consumidor
+- servicios no conectan entre ellos
 - basada en eventos
-- coreografia
-- sin maquina de estados
-- servicios idempotentes
+- evento entrada, evento salida
+- rollbacks en caso de error
+- Order genera el orderId y audita
 - resiliencia
 - escalabilidad
-- independiente del consumidor
 
-<!-- --> cada servicio su bbdd
+<!-- cada servicio su bbdd -->
 
 
 ![bg left 95% ](flow_middle.drawio.png)
 
 ---
 
-## Stack middleware
+## Idempotencia
 
-- Kubernetes
-- Kafka
-- BBDD mongo
-- Nodejs, kafkajs, express, mongoose
-- Todas las comunicaciones por eventos
-- mongo connect
+Para cumplir con lo anteriror necesitamos idempotencia. Marcamos el offset despues de enviar la salida. Deben ser idempotentes:
 
-![bg left](middle_stack.drawio.png)
+- todos los servicios de la saga
+- los servicios externos
+- los rollback de la saga
+
+![bg left](idempotente.drawio.png)
+
+<!-- hablar de base service -->
 
 ---
-
 ## Kafka Mongo connect
 
 Pros
@@ -200,7 +212,7 @@ Cons
 
 <div class=small>
 
-> existen ramas con ambas opciones implementadas
+> Finalmente se descarta
 
 </div>
 
@@ -209,49 +221,37 @@ Cons
 <!-- --> se planteo debezium, pero se uso connect
 ---
 
-## Idempotencia
+## Stack frontend
 
-Cuando un evento es recibido, no se actualiza su offset hasta despues de que haya sido enviado el evento de salida. Esto nos obliga a que sean idempontentes a su vez:
-- el resto de servicios de la saga
-- los servicios externos
-- los rollback de la saga
-![bg left](idempotente.drawio.png)
+- BFF ~= middleware
+- express: rest, WS, SSE, estáticos
+- Rollup como builder
+- Lit
+- Kor-ui
 
+![bg right](front_stack.drawio.png)
 
 ---
+
 ### Frontend
 
 - backend for frontend
-- reactivo
-- comunicaciones middle->front
-- resiliencia
-- escalabilidad
-- independiente del consumidor
+- sin bbdd
+- reenvia eventos de middle a front
+- convierte eventos en notificaciones
+- adapta modelos
 
-![bg right](flow_front.drawio.png)
-
----
-
-## Stack frontend
-
-- BackendForFrontend usa el mismo stack que middleware
-- express, como servidor de estaticos también
-- Rollup como buildr
-- Lit
-- Kor-ui, componetes
-
-![bg right](front_stack.drawio.png)
+![bg left](flow_front.drawio.png)
 
 ---
 
 
 ## Estaticos y servicio juntos
 
-El contendor front lleva dentro el servicio B4F y los estaticos
+El contendor front lleva dentro el servicio BFF y los estaticos
 - Los desarrolla el equipo front a sus necesidades
-- Agiliza el testing
-- El front recibe lo que necesita
-- El middle es independiente
+- Agiliza el ci/cd y el testing
+- Decide si envia online / offline
 
 ![bg right](front_container.drawio.png)
 
@@ -264,10 +264,12 @@ El contendor front lleva dentro el servicio B4F y los estaticos
 No se han encontrado grandes diferencias
 - En los 3 casos se queda una conexión abierta
 - pooling lo descartaria por dejar 1 hilo y por que a los 30 seg se repite la petición
-- server sent events es más sencillo de implementar
-- web sockets pormite bidireccionalidad
+- server sent events es REST
+- web sockets permite bidireccionalidad y datos complejos
 
-> seguramente para este caso de uso me quedaria con SSE, si puedo necesitar datos mas complejos o bidireccionalidad, WS
+> para este caso de uso SSE
+
+<!-- se planteo debezium, pero se uso connect -->
 ---
 
 ## Arquitectura final en kubernetes
