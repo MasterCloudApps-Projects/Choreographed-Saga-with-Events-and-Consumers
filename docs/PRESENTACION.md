@@ -7,82 +7,151 @@ theme: cads-theme
 
 ---
 
-<style scoped> h6 { font-size: 25px } </style> 
+<style scoped> h6 { font-size: 25px } img { margin-top: -30px} </style> 
 
 <!-- _class: centered -->
 
-![width:340px](./LogoMCA.png)
-<br>
-### CADS - Cloud Apps Delivery System:
-##### Transacciones aisladas, sagas, eventos, y sus consumidores
+![width:240px](./LogoMCA.png)
 
-<br>
-<br>
+<br/>
 
-###### Autor: Miguel García Sanguino <br>Tutor: Micael Gallego
+### Máster en Cloud Apps
+
+
+## Saga coreografiada con eventos y consumidores
+
+
+
+
+##### Curso académico 2021/2022 
+##### Trabajo de Fin de Máster
+
+<br/>
+
+###### Autor: Miguel García Sanguino <br>Tutor: Micael Gallego Carrillo
 
 
 ---
-<!-- _class: centered -->
+
 <!-- backgroundImage: url('./background.png') -->
 
-presentacion miquel
+
+
+##### Miguel García Sanguino
+- 15 años como developer
+- Frontend 80% Backend 20%
+- Software engineer en ing
+
+
+
+
+![bg left](./presentation_slide.png)
 
 ---
 <!-- paginate: false -->
 <!-- footer: Máster en Cloud Apps. TFM - Miguel García Sanguino -->
 
 
-# Introducción
-##### CADS - Cloud Apps Delivery System
+### Introducción
 
-Se buscando un objetivo en el TFM, la independia de los actores en estructuras de microservicios cuando hay transacciones. Y a su vez podemos hablar de independencia de los servicios entre si y al mismo tiempo con el front end.
+- Transacciones en microservicios
+- Patron Saga
+- Gobiernos de equipos con microservicios, idependencia
+- Experiencia de usuario
 
-<!-- Hablar del problema de consumo desde el front y del problema de interdependencias en el middle --> 
+<!-- Por experiencias paadas, una transaccion en MS se complican mucho --> 
+<!-- en que consiste una saga --> 
+<!-- pains en gobierno en empresas grandes --> 
+<!-- responder a front 1 vez? rapido pero solo parte o lenta pero completa?  --> 
 ---
 
 <!-- _class: split -->
 
 <div class=cdiv>
 
-## Objetivos: Independencia intra serivicios y con frontend
+### Objetivos:
 
+- Profundizar transacciones con microservicios coreografiados.
+
+- Investigar la conexión de consumidores a procesos asíncronos largos.
 </div>
 
 <div class=ldiv>
 
 #### Middleware
-- sagas
-- coreografia
-- sin maquina de estados
+- servicios desacoplados
+- saga coreografiada, sin maquina de estados
 - enfocado a eventos
-- servicios independientes
-- aislado
+- escalables y resilientes
+
 </div>
 
 <div class=rdiv>
 
 #### Frontend
-- independiente
-- asincrono
-- backend for frontend
+- no impactar en middleware
+- independiente y asincrono
+- consuma de los eventos
 - noficaciones online / offline
 </div>
 
+
+<!-- MIDDLE --> 
+<!-- desacoplados -> entre ellos y tambien de los consumidores --> 
+<!-- Coreografia -> desconocer la transaccion, indepencida en desarrollo y ciclo de vida, codigo y equipos --> 
+<!-- Sin maquina de estados, por quitar la coreografia, simplificar --> 
+<!-- Eventos, porque da independencia, capacidad de cambiar el orden de la saga, meter mas pasos --> 
+<!-- Por experiencias paadas, una transaccion en MS se complican mucho --> 
+
+
+<!-- FRONT --> 
+<!-- No queremos que el middleware se tenga que preocupar en informarnos ni que consumidores tiene, ni de que modelo de datos necesita cada uno--> 
+<!-- comunicacion independiente y asincrona --> 
+<!-- propone un BFF consumira eventos, escucha sin molestar --> 
+<!--  --> 
+<!-- Por experiencias paadas, una transaccion en MS se complican mucho --> 
+
+<!-- Y todas las buenas practicas que hemos aprendido en el master --> 
+
 ---
 
-##### CADS - Cloud Apps Delivery System
+##### Caso de uso
 
 - Caso: pedido de comida online
 - Reserva de restaurante
 - Asignar un rider
 - Realizar pago
+- Competar pedidos
+
+
+![bg right](./home_slide.png)
+
+<!-- Cada paso será un servicio --> 
+
+---
+<!-- _class: centered -->
+
+##### Caso de uso
+
+
+
+![bg width:750px](front_scrennshot.gif)
+
+<!-- hablar de order??? --> 
+
+---
+
+##### Caso de uso
+
+- Cada paso un servicio
 - Rollback en caso de fallo
 - Informar al usuario en cada paso
 
 <!-- --> poner un grafico de saga a nivel funcional
 
-![bg right](saga.drawio.png)
+![bg left](saga.drawio.png)
+
+<!-- hablar de order??? --> 
 
 ---
 
