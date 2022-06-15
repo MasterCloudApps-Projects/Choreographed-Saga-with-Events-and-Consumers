@@ -59,14 +59,17 @@ Transacciones en microservicios
 
 Patron Saga
 
-Gobiernos de equipos con microservicios, idependencia
+Gobiernos de equipos con microservicios
 
 Experiencia de usuario
 
 <!-- Por experiencias paadas, una transaccion en MS se complican mucho --> 
 <!-- en que consiste una saga --> 
 <!-- pains en gobierno en empresas grandes --> 
-<!-- responder a front 1 vez? rapido pero solo parte o lenta pero completa?  --> 
+<!-- responder a front 1 vez? rapido pero solo parte o lenta pero completa? 
+
+
+El patrón saga1 es un patrón para asegurar la consistencia de una transacción distribuida entre microservicios. El patrón en sí se basa en crear estructuras de los servicios para los caminos en los que todo va bien y también para cada posible acción en la que la transacción falla y se debe dar marcha atrás a las acciones que ya se hayan ejecutado por servicios anteriores. Existen varias formas de implementar las sagas. Una de las más usadas es que un servicio orqueste los pasos de la transacción y controle el estado, decidiendo las acciones siguientes o las operaciones de marcha atrás en caso de fallo. Es cierto que globalmente la hace más sencilla y controlable, pero acopla mucho los servicios unos con otros. --> 
 ---
 
 <!-- _class: split -->
@@ -272,10 +275,10 @@ El contendor front lleva dentro el servicio BFF y los estaticos
 ## Web Sockets vs Server Sent Events vs pooling
 
 No se han encontrado grandes diferencias
-- En los 3 casos se queda una conexión abierta
-- pooling lo descartaria por dejar 1 hilo y por que a los 30 seg se repite la petición
-- server sent events es REST
-- web sockets permite bidireccionalidad y datos complejos
+- En los 3 casos se queda una conexión abierta, tiempos muy similares
+- Pooling descartado por dejar 1 hilo y por que a los 30 seg se repite la petición
+- Server Sent Events es REST
+- Web Sockets permite bidireccionalidad y datos complejos
 
 > para este caso de uso SSE
 
@@ -326,7 +329,7 @@ Test hacen check del rollback en las bbdd
 Objetivos conseguidos:
 
 - Saga coreografiada con eventos en kafka
-- servicios idempotentes, resilientes e independientes.
+- servicios idempotentes, resilientes, escalables e independientes.
 - El frontend consume actualizaciones sin afectar a los servicios
 
 Destacable:
@@ -352,6 +355,9 @@ Performance tests de la conexión asíncrona
 • En qué casos se bloquean hilos y en cuáles no.
 • Cuál consume más recursos.
 • Cuántas conexiones en paralelo puede soportar.
+
+Escalabilidad BFF importante si un usiaro esta en una instancia y llega el evento a otra, que hacemos?
+Hazelcast!!
  -->
 </div>
 
