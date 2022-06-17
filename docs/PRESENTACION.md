@@ -30,7 +30,7 @@ theme: cads-theme
 
 ###### Autor: Miguel García Sanguino <br>Tutor: Micael Gallego Carrillo
 
-
+<!-- titulo y me presento y tutor-->
 ---
 
 <!-- backgroundImage: url('./background.png') -->
@@ -40,13 +40,18 @@ theme: cads-theme
 ##### Miguel García Sanguino
 15 años como developer
 Frontend 80% Backend 20%
-Software engineer en ing
+Software engineer en ING
 
 
 
 
 ![bg left](./presentation_slide.png)
 
+<!-- 
+quien soy
+
+redes sociales
+ -->
 ---
 <!-- paginate: false -->
 <!-- footer: Máster en Cloud Apps. TFM - Miguel García Sanguino -->
@@ -57,19 +62,25 @@ Software engineer en ing
 
 Transacciones en microservicios
 
-Patron Saga
+Patrón Saga
 
 Gobiernos de equipos con microservicios
 
 Experiencia de usuario
 
-<!-- Por experiencias paadas, una transaccion en MS se complican mucho --> 
-<!-- en que consiste una saga --> 
-<!-- pains en gobierno en empresas grandes --> 
-<!-- responder a front 1 vez? rapido pero solo parte o lenta pero completa? 
+<!-- 
+transaccion en MS se complican mucho
 
+saga es un patron asegura consistencia
 
-El patrón saga1 es un patrón para asegurar la consistencia de una transacción distribuida entre microservicios. El patrón en sí se basa en crear estructuras de los servicios para los caminos en los que todo va bien y también para cada posible acción en la que la transacción falla y se debe dar marcha atrás a las acciones que ya se hayan ejecutado por servicios anteriores. Existen varias formas de implementar las sagas. Una de las más usadas es que un servicio orqueste los pasos de la transacción y controle el estado, decidiendo las acciones siguientes o las operaciones de marcha atrás en caso de fallo. Es cierto que globalmente la hace más sencilla y controlable, pero acopla mucho los servicios unos con otros. --> 
+crea estructuras para caminos felices y marchas atras en caso de fallo
+
+una muy usada, orquestacion y maquina de estados, pero acopla mucho
+
+problemas en gobierno muchos equipos en empresas grandes
+
+responder a front 1 vez? rapido pero solo parte o lenta pero completa? 
+ --> 
 ---
 
 <!-- _class: split -->
@@ -80,45 +91,54 @@ El patrón saga1 es un patrón para asegurar la consistencia de una transacción
 
 Profundizar transacciones con microservicios coreografiados.
 
-Investigar la conexión de consumidores a procesos asíncronos largos.
+Investigar consumidores de procesos largos con respuesta múltiple.
 </div>
 
 <div class=ldiv>
 
 #### Middleware
--servicios desacoplados
--saga coreografiada, sin maquina de estados
--enfocado a eventos
--escalables y resilientes
+- servicios desacoplados
+- saga coreografiada, sin estados
+- enfocado a eventos
+- escalables y resilientes
 
 </div>
 
 <div class=rdiv>
 
 #### Frontend
--no impactar en middleware
--independiente y asincrono
--consuma de los eventos
--noficaciones online / offline
+- no impactar en middleware
+- independiente y asíncrono
+- consuma de los eventos
+- notificaciones online / offline
 </div>
 
 
-<!-- MIDDLE --> 
-<!-- desacoplados -> entre ellos y tambien de los consumidores --> 
-<!-- Coreografia -> desconocer la transaccion, indepencida en desarrollo y ciclo de vida, codigo y equipos --> 
-<!-- Sin maquina de estados, por quitar la coreografia, simplificar --> 
-<!-- Eventos, porque da independencia, capacidad de cambiar el orden de la saga, meter mas pasos --> 
-<!-- Por experiencias paadas, una transaccion en MS se complican mucho --> 
+<!-- MIDDLE  
+
+ desacoplados -> entre ellos y tambien de los consumidores  
+
+ Coreografia -> desconocer la transaccion, indepencida en desarrollo y ciclo de vida, codigo y equipos  
+
+ Sin maquina de estados, por quitar la coreografia, simplificar  
+
+ Eventos, porque da independencia, capacidad de cambiar el orden de la saga, meter mas pasos  
+
+ Por experiencias paadas, una transaccion en MS se complican mucho 
+ --> 
 
 
-<!-- FRONT --> 
-<!-- No queremos que el middleware se tenga que preocupar en informarnos ni que consumidores tiene, ni de que modelo de datos necesita cada uno--> 
-<!-- comunicacion independiente y asincrona --> 
-<!-- propone un BFF consumira eventos, escucha sin molestar --> 
-<!--  --> 
-<!-- Por experiencias paadas, una transaccion en MS se complican mucho --> 
+<!-- FRONT 
 
-<!-- Y todas las buenas practicas que hemos aprendido en el master --> 
+No queremos que el middleware se tenga que preocupar en informarnos ni que consumidores tiene, ni de que modelo de datos necesita cada uno
+
+comunicacion independiente y asincrona 
+
+propone un BFF consumira eventos, escucha sin molestar 
+
+Por experiencias paadas, una transaccion en MS se complican mucho 
+
+Y todas las buenas practicas que hemos aprendido en el master --> 
 
 ---
 
@@ -126,18 +146,22 @@ Investigar la conexión de consumidores a procesos asíncronos largos.
 
 Pedido de comida online
 
-Reserva de restaurante
+- Reserva de restaurante
 
-Asignar un rider
+- Asignar un rider
 
-Realizar pago
+- Realizar pago
 
-Competar pedidos
+- Completar pedidos
 
 
 ![bg right](./home_slide.png)
 
-<!-- Cada paso será un servicio --> 
+<!-- 
+Cada paso será un servicio 
+
+Frontal
+--> 
 
 ---
 <!-- _class: centered -->
@@ -148,7 +172,7 @@ Competar pedidos
 
 ![bg width:750px](front_scrennshot.gif)
 
-<!-- hablar de order??? --> 
+<!-- los pasos happy path --> 
 
 ---
 
@@ -164,35 +188,40 @@ Informar al usuario en cada paso
 
 ![bg left](saga.drawio.png)
 
-<!-- hablar de order??? --> 
+<!-- completada vs cancelada --> 
 
 ---
 
 ## Stack middleware
 
--Kubernetes
--Kafka
--BBDD mongo
--Nodejs
--kafkajs
--express
--mongoose
+- Kubernetes
+- Kafka
+- BBDD mongo
+- Nodejs
+- kafkajs
+- express
+- mongoose
 
 ![bg left](middle_stack.drawio.png)
 
 ---
 ### Flujo middleware
 
--1 punto de entrada, independiente del consumidor
--servicios no conectan entre ellos
--basada en eventos
--evento entrada, evento salida
--rollbacks en caso de error
--Order genera el orderId y audita
--resiliencia
--escalabilidad
+- único punto de entrada, independiente del consumidor
+- servicios no conectan entre ellos
+- evento entrada, evento salida
+- Order genera el orderId y audita
+- OrderId como correlation id
+- Permite por variables de entorno cambiar orden de la saga
+- resiliencia
+- escalabilidad
 
-<!-- cada servicio su bbdd -->
+<!-- cada servicio su bbdd
+
+Orderid correlationId
+
+** 
+ -->
 
 
 ![bg left 95% ](flow_middle.drawio.png)
@@ -201,7 +230,8 @@ Informar al usuario en cada paso
 
 ## Idempotencia
 
-Para cumplir con lo anteriror necesitamos idempotencia. Marcamos el offset despues de enviar la salida. Deben ser idempotentes:
+Marcamos el offset después de enviar la salida.
+Deben ser idempotentes:
 
 - todos los servicios de la saga
 - los servicios externos
@@ -209,13 +239,16 @@ Para cumplir con lo anteriror necesitamos idempotencia. Marcamos el offset despu
 
 ![bg left](idempotente.drawio.png)
 
-<!-- hablar de base service -->
+<!-- 
+llevas 6 min!!!
+
+hablar de base service -->
 
 ---
 ## Kafka Mongo connect
 
 Pros
-- envia eventos al persistir en bbdd
+- envía eventos al persistir en bbdd
 - simplifica idempotencia
 
 Cons
@@ -236,11 +269,11 @@ Cons
 
 ## Stack frontend
 
--BFF ~= middleware
--express: rest, WS, SSE, estáticos
--Rollup como builder
--Lit
--Kor-ui
+- BFF ~= middleware
+- express: rest, WS, SSE, estáticos
+- Rollup como builder
+- Lit
+- Kor-ui
 
 ![bg right](front_stack.drawio.png)
 
@@ -248,23 +281,23 @@ Cons
 
 ### Frontend
 
--backend for frontend
--sin bbdd
--reenvia eventos de middle a front
--convierte eventos en notificaciones
--adapta modelos
+- backend for frontend
+- sin bbdd
+- reenvía eventos de middle a front
+- convierte eventos en notificaciones
+- adapta modelos
 
 ![bg left](flow_front.drawio.png)
 
 ---
 
 
-## Estaticos y servicio juntos
+## Estáticos y servicio juntos
 
-El contendor front lleva dentro el servicio BFF y los estaticos
+El contendor front lleva dentro el servicio BFF y los estáticos
 - Los desarrolla el equipo front a sus necesidades
-- Agiliza el ci/cd y el testing
-- Decide si envia online / offline
+- Agiliza el CI/CD y el testing
+- Decide si envía online / offline
 
 ![bg right](front_container.drawio.png)
 
@@ -276,7 +309,7 @@ El contendor front lleva dentro el servicio BFF y los estaticos
 
 No se han encontrado grandes diferencias
 - En los 3 casos se queda una conexión abierta, tiempos muy similares
-- Pooling descartado por dejar 1 hilo y por que a los 30 seg se repite la petición
+- Pooling descartado por dejar 1 hilo y porque a los 30 seg se repite la petición
 - Server Sent Events es REST
 - Web Sockets permite bidireccionalidad y datos complejos
 
@@ -290,12 +323,12 @@ No se han encontrado grandes diferencias
 
 ![bg right](arch_tfm.drawio.png)
 
--ingress
--front
--servicios + bases de datos
--externals ~ Mocks
--notificaciones ~ Mocks
--Zookeeper y kafka
+- ingress
+- front
+- servicios + bases de datos
+- externals ~ Mocks
+- notificaciones ~ Mocks
+- Zookeeper y kafka
 
 <!-- También están incluidos kowl y Kafka-ui -->
 ---
@@ -304,14 +337,14 @@ No se han encontrado grandes diferencias
 
 ![bg left](./e2e_slide.png)
 
-Test e2e en cypress con gherkin
+Test E2E en cypress con gherkin.
 
 Cada test configura el api externals: tiempo y response code
-(banco, restaurante, rider)
+(banco, restaurante, rider).
 
-Test con el usuario online y offline, check de notificaciones
+Tests con el usuario online y offline, check de notificaciones.
 
-Test hacen check del rollback en las bbdd
+Tests comprueban el rollback en las bbdd.
 
 > reportes: [tfm.sanguino.io](https://tfm.sanguino.io/)
 
@@ -329,7 +362,7 @@ Test hacen check del rollback en las bbdd
 Objetivos conseguidos:
 
 - Saga coreografiada con eventos en kafka
-- servicios idempotentes, resilientes, escalables e independientes.
+- ervicios idempotentes, resilientes, escalables e independientes.
 - El frontend consume actualizaciones sin afectar a los servicios
 
 Destacable:
@@ -375,8 +408,8 @@ CI/CD
 Observabilidad
 Seguridad
 Conciliaciones
-Escalabilidad BFF
 Frontend – UX
+Escalabilidad BFF
 
 </div>
 
