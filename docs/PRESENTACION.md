@@ -7,101 +7,188 @@ theme: cads-theme
 
 ---
 
-<style scoped> h6 { font-size: 25px } </style> 
+<style scoped> h6 { font-size: 25px } img { margin-top: -30px} </style> 
 
 <!-- _class: centered -->
 
-![width:340px](./LogoMCA.png)
-<br>
-### CADS - Cloud Apps Delivery System:
-##### Transacciones aisladas, sagas, eventos, y sus consumidores
+![width:240px](./LogoMCA.png)
 
-<br>
-<br>
+<br/>
 
-###### Autor: Miguel García Sanguino <br>Tutor: Micael Gallego
+### Máster en Cloud Apps
 
 
+## Saga coreografiada con eventos y consumidores
+
+
+
+
+##### Curso académico 2021/2022 
+##### Trabajo de Fin de Máster
+
+<br/>
+
+###### Autor: Miguel García Sanguino <br>Tutor: Micael Gallego Carrillo
+
+<!-- titulo y me presento y tutor-->
 ---
-<!-- _class: centered -->
+
 <!-- backgroundImage: url('./background.png') -->
 
-presentacion miquel
 
+
+##### Miguel García Sanguino
+15 años como developer
+Frontend 80% Backend 20%
+Software engineer en ING
+
+
+
+
+![bg left](./presentation_slide.png)
+
+<!-- 
+quien soy
+
+redes sociales
+ -->
 ---
 <!-- paginate: false -->
 <!-- footer: Máster en Cloud Apps. TFM - Miguel García Sanguino -->
 
+### Introducción
+<br />
 
-# Introducción
-##### CADS - Cloud Apps Delivery System
 
-Se buscando un objetivo en el TFM, la independia de los actores en estructuras de microservicios cuando hay transacciones. Y a su vez podemos hablar de independencia de los servicios entre si y al mismo tiempo con el front end.
+Transacciones en microservicios
 
-<!-- Hablar del problema de consumo desde el front y del problema de interdependencias en el middle --> 
+Patrón Saga
+
+Gobiernos de equipos con microservicios
+
+Experiencia de usuario
+
+<!-- 
+transaccion en MS se complican mucho
+
+saga es un patron asegura consistencia
+
+crea estructuras para caminos felices y marchas atras en caso de fallo
+
+una muy usada, orquestacion y maquina de estados, pero acopla mucho
+
+problemas en gobierno muchos equipos en empresas grandes
+
+responder a front 1 vez? rapido pero solo parte o lenta pero completa? 
+ --> 
 ---
 
 <!-- _class: split -->
 
 <div class=cdiv>
 
-## Objetivos: Independencia intra serivicios y con frontend
+### Objetivos:
 
+Profundizar transacciones con microservicios coreografiados.
+
+Investigar consumidores de procesos largos con respuesta múltiple.
 </div>
 
 <div class=ldiv>
 
 #### Middleware
-- sagas
-- coreografia
-- sin maquina de estados
+- servicios desacoplados
+- saga coreografiada, sin estados
 - enfocado a eventos
-- servicios independientes
-- aislado
+- escalables y resilientes
+
 </div>
 
 <div class=rdiv>
 
 #### Frontend
-- independiente
-- asincrono
-- backend for frontend
-- noficaciones online / offline
+- no impactar en middleware
+- independiente y asíncrono
+- consuma de los eventos
+- notificaciones online / offline
 </div>
+
+
+<!-- MIDDLE  
+
+ desacoplados -> entre ellos y tambien de los consumidores  
+
+ Coreografia -> desconocer la transaccion, indepencida en desarrollo y ciclo de vida, codigo y equipos  
+
+ Sin maquina de estados, por quitar la coreografia, simplificar  
+
+ Eventos, porque da independencia, capacidad de cambiar el orden de la saga, meter mas pasos  
+
+ Por experiencias paadas, una transaccion en MS se complican mucho 
+ --> 
+
+
+<!-- FRONT 
+
+No queremos que el middleware se tenga que preocupar en informarnos ni que consumidores tiene, ni de que modelo de datos necesita cada uno
+
+comunicacion independiente y asincrona 
+
+propone un BFF consumira eventos, escucha sin molestar 
+
+Por experiencias paadas, una transaccion en MS se complican mucho 
+
+Y todas las buenas practicas que hemos aprendido en el master --> 
 
 ---
 
-##### CADS - Cloud Apps Delivery System
+##### Caso de uso
 
-- Caso: pedido de comida online
+Pedido de comida online
+
 - Reserva de restaurante
+
 - Asignar un rider
+
 - Realizar pago
-- Rollback en caso de fallo
-- Informar al usuario en cada paso
+
+- Completar pedidos
+
+
+![bg right](./home_slide.png)
+
+<!-- 
+Cada paso será un servicio 
+
+Frontal
+--> 
+
+---
+<!-- _class: centered -->
+
+##### Caso de uso
+
+
+
+![bg width:750px](front_scrennshot.gif)
+
+<!-- los pasos happy path --> 
+
+---
+
+##### Caso de uso
+
+Cada paso un servicio
+
+Rollback en caso de fallo
+
+Informar al usuario en cada paso
 
 <!-- --> poner un grafico de saga a nivel funcional
 
-![bg right](saga.drawio.png)
+![bg left](saga.drawio.png)
 
----
-
-### middleware
-
-- modular
-- servicios independientes
-- basada en eventos
-- coreografia
-- sin maquina de estados
-- servicios idempotentes
-- resiliencia
-- escalabilidad
-- independiente del consumidor
-
-<!-- --> cada servicio su bbdd
-
-
-![bg left 95% ](flow_middle.drawio.png)
+<!-- completada vs cancelada --> 
 
 ---
 
@@ -110,18 +197,56 @@ Se buscando un objetivo en el TFM, la independia de los actores en estructuras d
 - Kubernetes
 - Kafka
 - BBDD mongo
-- Nodejs, kafkajs, express, mongoose
-- Todas las comunicaciones por eventos
-- mongo connect
+- Nodejs
+- kafkajs
+- express
+- mongoose
 
 ![bg left](middle_stack.drawio.png)
 
 ---
+### Flujo middleware
 
+- único punto de entrada, independiente del consumidor
+- servicios no tienen conexiones entre ellos
+- Order genera el orderId y audita
+- OrderId como correlation id
+- Variables de entorno cambiar orden de la saga
+- resiliencia y escalabilidad
+
+<!-- cada servicio su bbdd
+
+Orderid correlationId
+
+** 
+ -->
+
+
+![bg left 95% ](flow_middle.drawio.png)
+
+---
+
+## Idempotencia
+
+Marcamos el offset después de enviar la salida.
+Deben ser idempotentes:
+
+- todos los servicios de la saga
+- los servicios externos
+- los rollback de la saga
+
+![bg left](idempotente.drawio.png)
+
+<!-- 
+llevas 6 min!!!
+
+hablar de base service -->
+
+---
 ## Kafka Mongo connect
 
 Pros
-- envia eventos al persistir en bbdd
+- envía eventos al persistir en bbdd
 - simplifica idempotencia
 
 Cons
@@ -131,7 +256,7 @@ Cons
 
 <div class=small>
 
-> existen ramas con ambas opciones implementadas
+> Finalmente se descarta, no merece la pena
 
 </div>
 
@@ -140,49 +265,37 @@ Cons
 <!-- --> se planteo debezium, pero se uso connect
 ---
 
-## Idempotencia
-
-Cuando un evento es recibido, no se actualiza su offset hasta despues de que haya sido enviado el evento de salida. Esto nos obliga a que sean idempontentes a su vez:
-- el resto de servicios de la saga
-- los servicios externos
-- los rollback de la saga
-![bg left](idempotente.drawio.png)
-
-
----
-### Frontend
-
-- backend for frontend
-- reactivo
-- comunicaciones middle->front
-- resiliencia
-- escalabilidad
-- independiente del consumidor
-
-![bg right](flow_front.drawio.png)
-
----
-
 ## Stack frontend
 
-- BackendForFrontend usa el mismo stack que middleware
-- express, como servidor de estaticos también
-- Rollup como buildr
+- BFF ~= middleware
+- express: rest, WS, SSE, estáticos
+- Rollup como builder
 - Lit
-- Kor-ui, componetes
+- Kor-ui
 
 ![bg right](front_stack.drawio.png)
 
 ---
 
+### Frontend
 
-## Estaticos y servicio juntos
+- backend for frontend
+- sin bbdd
+- reenvía eventos de middle a front
+- convierte eventos en notificaciones
+- adapta modelos
 
-El contendor front lleva dentro el servicio B4F y los estaticos
+![bg left](flow_front.drawio.png)
+
+---
+
+
+## Estáticos y servicio juntos
+
+El contendor front lleva dentro el servicio BFF y los estáticos
 - Los desarrolla el equipo front a sus necesidades
-- Agiliza el testing
-- El front recibe lo que necesita
-- El middle es independiente
+- Agiliza el CI/CD y el testing
+- Decide si envía online / offline
 
 ![bg right](front_container.drawio.png)
 
@@ -193,12 +306,14 @@ El contendor front lleva dentro el servicio B4F y los estaticos
 ## Web Sockets vs Server Sent Events vs pooling
 
 No se han encontrado grandes diferencias
-- En los 3 casos se queda una conexión abierta
-- pooling lo descartaria por dejar 1 hilo y por que a los 30 seg se repite la petición
-- server sent events es más sencillo de implementar
-- web sockets pormite bidireccionalidad
+- En los 3 casos se queda una conexión abierta, tiempos muy similares
+- Pooling descartado por dejar 1 hilo y porque a los 30 seg se repite la petición
+- Server Sent Events es REST
+- Web Sockets permite bidireccionalidad y datos complejos
 
-> seguramente para este caso de uso me quedaria con SSE, si puedo necesitar datos mas complejos o bidireccionalidad, WS
+> para este caso de uso SSE
+
+<!--   -->
 ---
 
 ## Arquitectura final en kubernetes
@@ -206,23 +321,30 @@ No se han encontrado grandes diferencias
 
 ![bg right](arch_tfm.drawio.png)
 
+- ingress
 - front
-- microservicios
-- bases de datos
-- Api externals ~ Mocks
-- Api notificaciones ~ Mocks
-- +Zookeeper
-- +kafka
+- servicios + bases de datos
+- externals ~ Mocks
+- notificaciones ~ Mocks
+- Zookeeper y kafka
 
+<!-- También están incluidos kowl y Kafka-ui -->
 ---
 
 ## E2E test
 
-Para el testing de todo se han desarrollado unos test e2e en cypress con gherkin
+![bg left](./e2e_slide.png)
 
-Cada test configura el api externals para decidir cuanto tarda y que respuesta da el banco, el restaurante, y el rider
+Test E2E en cypress con gherkin.
 
-Cada test decide si el usuario permanece y ve el resultado online, o cierra y comprueba que el servicio de notificaciones realiza la entrega
+Cada test configura el api externals: tiempo y response code
+(banco, restaurante, rider).
+
+Tests con el usuario online y offline, check de notificaciones.
+
+Tests comprueban el rollback en las bbdd.
+
+> reportes: [tfm.sanguino.io](https://tfm.sanguino.io/)
 
 --- 
 
@@ -233,3 +355,73 @@ Cada test decide si el usuario permanece y ve el resultado online, o cierra y co
 </video>
 
 ---
+
+## Conclusiones
+Objetivos conseguidos:
+
+- Saga coreografiada con eventos en kafka
+- Servicios idempotentes, resilientes, escalables e independientes.
+- El frontend consume actualizaciones sin afectar a los servicios
+
+Destacable:
+
+- A priori es bastante simple poca complejidad y muy mantenible
+- BFF es fundamental para el proyecto
+- SSE, WC, Pooling no hay mucha diferencia
+
+<!-- habria que hacer test en el BFF de recursos consumidos -->
+--- 
+
+<!-- _class: split -->
+
+<div class=cdiv>
+
+## Trabajos futuros
+
+<!-- 
+Como resumen evolucionarlo y hacerlo un proyecto "real"
+
+Performance tests de la conexión asíncrona
+
+• En qué casos se bloquean hilos y en cuáles no.
+• Cuál consume más recursos.
+• Cuántas conexiones en paralelo puede soportar.
+
+Escalabilidad BFF importante si un usiaro esta en una instancia y llega el evento a otra, que hacemos?
+Hazelcast!!
+ -->
+</div>
+
+<div class=ldiv>
+
+Refactor
+Performance conexión BFF
+Escalabilidad
+Testing
+CI/CD
+</div>
+
+<div class=rdiv>
+
+Observabilidad
+Seguridad
+Conciliaciones
+Frontend – UX
+Escalabilidad BFF
+
+</div>
+
+---
+
+<!-- _class: centered -->
+
+<style scoped> h2 { font-size: 80px }</style> 
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+## GRACIAS!
+
