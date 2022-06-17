@@ -208,13 +208,11 @@ Informar al usuario en cada paso
 ### Flujo middleware
 
 - único punto de entrada, independiente del consumidor
-- servicios no conectan entre ellos
-- evento entrada, evento salida
+- servicios no tienen conexiones entre ellos
 - Order genera el orderId y audita
 - OrderId como correlation id
-- Permite por variables de entorno cambiar orden de la saga
-- resiliencia
-- escalabilidad
+- Variables de entorno cambiar orden de la saga
+- resiliencia y escalabilidad
 
 <!-- cada servicio su bbdd
 
@@ -362,7 +360,7 @@ Tests comprueban el rollback en las bbdd.
 Objetivos conseguidos:
 
 - Saga coreografiada con eventos en kafka
-- ervicios idempotentes, resilientes, escalables e independientes.
+- Servicios idempotentes, resilientes, escalables e independientes.
 - El frontend consume actualizaciones sin afectar a los servicios
 
 Destacable:
