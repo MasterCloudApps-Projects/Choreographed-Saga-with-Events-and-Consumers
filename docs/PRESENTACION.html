@@ -20,12 +20,12 @@ section.split {
     display: grid;
     grid-template-columns: 500px 500px;
     grid-template-rows: 100px auto;
-    grid-template-areas: 
+    grid-template-areas:
         "slideheading slideheading"
         "leftpanel rightpanel";
 }
-section.split h3, 
-section.split .ldiv, 
+section.split h3,
+section.split .ldiv,
 section.split .rdiv { border:none }
 section.split h3 {
     grid-area: slideheading;
@@ -237,7 +237,7 @@ Deben ser idempotentes:</p>
 <p>Tests con el usuario online y offline, check de notificaciones.</p>
 <p>Tests comprueban el rollback en las bbdd.</p>
 <blockquote>
-<p>reportes: <a href="https://tfm.sanguino.io/">tfm.sanguino.io</a></p>
+<p>reportes: <a href="https://sanguino.cloud.okteto.net/">sanguino.cloud.okteto.net</a></p>
 </blockquote>
 <footer>Máster en Cloud Apps. TFM - Miguel García Sanguino</footer>
 </section>
@@ -304,27 +304,27 @@ una muy usada, orquestacion y maquina de estados, pero acopla mucho
 
 problemas en gobierno muchos equipos en empresas grandes
 
-responder a front 1 vez? rapido pero solo parte o lenta pero completa?</p></div><div class="bespoke-marp-note" data-index="3" tabindex="0"><p>MIDDLE  
+responder a front 1 vez? rapido pero solo parte o lenta pero completa?</p></div><div class="bespoke-marp-note" data-index="3" tabindex="0"><p>MIDDLE
 
- desacoplados -&gt; entre ellos y tambien de los consumidores  
+ desacoplados -&gt; entre ellos y tambien de los consumidores
 
- Coreografia -&gt; desconocer la transaccion, indepencida en desarrollo y ciclo de vida, codigo y equipos  
+ Coreografia -&gt; desconocer la transaccion, indepencida en desarrollo y ciclo de vida, codigo y equipos
 
- Sin maquina de estados, por quitar la coreografia, simplificar  
+ Sin maquina de estados, por quitar la coreografia, simplificar
 
- Eventos, porque da independencia, capacidad de cambiar el orden de la saga, meter mas pasos  
+ Eventos, porque da independencia, capacidad de cambiar el orden de la saga, meter mas pasos
 
- Por experiencias paadas, una transaccion en MS se complican mucho</p><p>FRONT 
+ Por experiencias paadas, una transaccion en MS se complican mucho</p><p>FRONT
 
 No queremos que el middleware se tenga que preocupar en informarnos ni que consumidores tiene, ni de que modelo de datos necesita cada uno
 
-comunicacion independiente y asincrona 
+comunicacion independiente y asincrona
 
-propone un BFF consumira eventos, escucha sin molestar 
+propone un BFF consumira eventos, escucha sin molestar
 
-Por experiencias paadas, una transaccion en MS se complican mucho 
+Por experiencias paadas, una transaccion en MS se complican mucho
 
-Y todas las buenas practicas que hemos aprendido en el master</p></div><div class="bespoke-marp-note" data-index="4" tabindex="0"><p>Cada paso será un servicio 
+Y todas las buenas practicas que hemos aprendido en el master</p></div><div class="bespoke-marp-note" data-index="4" tabindex="0"><p>Cada paso será un servicio
 
 Frontal</p></div><div class="bespoke-marp-note" data-index="5" tabindex="0"><p>los pasos happy path</p></div><div class="bespoke-marp-note" data-index="6" tabindex="0"><p></p><p>completada vs cancelada</p></div><div class="bespoke-marp-note" data-index="8" tabindex="0"><p>cada servicio su bbdd
 

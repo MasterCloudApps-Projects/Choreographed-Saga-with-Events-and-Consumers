@@ -4,12 +4,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kowl-ingress
-  namespace: cadsspace
+  namespace: sanguino
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-  - host: kowl.k8stfm.com
+  - host: kowl.sanguino.cloud.okteto.net
     http:
       paths:
       - path: /(.*)
@@ -26,12 +26,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kafka-ui-ingress
-  namespace: cadsspace
+  namespace: sanguino
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-  - host: kafka-ui.k8stfm.com
+  - host: kafka-ui.sanguino.cloud.okteto.net
     http:
       paths:
       - path: /(.*)
@@ -48,12 +48,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: cads-ingress
-  namespace: cadsspace
+  namespace: sanguino
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   rules:
-  - host: cads.k8stfm.com
+  - host: cads.sanguino.cloud.okteto.net
     http:
       paths:
       - path: /(.*)

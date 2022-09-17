@@ -3,7 +3,7 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: mongo-order-pv
-  namespace: cadsspace
+  namespace: sanguino
 spec:
   storageClassName: mongo-order-cn
   accessModes:
@@ -18,7 +18,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: mongo-order-pvc
-  namespace: cadsspace
+  namespace: sanguino
 spec:
   storageClassName: mongo-order-cn
   accessModes:
@@ -32,7 +32,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongo-order
-  namespace: cadsspace
+  namespace: sanguino
 spec:
   replicas: 1
   selector:
@@ -66,7 +66,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongo-order-svc
-  namespace: cadsspace
+  namespace: sanguino
   labels:
     app: mongo-order
 spec:

@@ -344,7 +344,7 @@ Tests con el usuario online y offline, check de notificaciones.
 
 Tests comprueban el rollback en las bbdd.
 
-> reportes: [tfm.sanguino.io](https://tfm.sanguino.io/)
+> reportes: [sanguino.cloud.okteto.net](https://sanguino.cloud.okteto.net/)
 
 --- 
 

@@ -115,12 +115,12 @@ $ minikube ip
 
 Y la utilizamos para crear las dns que el ingress tiene configuradas (debe ser añadida al `/etc/hosts`)
 ```properties
-192.168.64.6 cads.k8stfm.com
+192.168.64.6 cads.sanguino.cloud.okteto.net
 ```
 El ingress tambien expone [`kowl`](https://github.com/redpanda-data/kowl) y [`kafka-ui`](https://github.com/provectus/kafka-ui) para facilitar la depuraración de eventos. Si se desean usar se deben añadir también las dns:
 ```properties
-192.168.64.6 kowl.k8stfm.com
-192.168.64.6 kafka-ui.k8stfm.com
+192.168.64.6 kowl.sanguino.cloud.okteto.net
+192.168.64.6 kafka-ui.sanguino.cloud.okteto.net
 ```
 
 Una vez configurado minikube podemos arrancar todo el namespace de golpe, los servicios usan [`wait-for-it.sh`](https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh) para esperar a que kafka y mongo estén activos antes de arrancar:
@@ -154,5 +154,5 @@ $ npm run cy:run
 
 Los test e2e hacen screenshots y graban en video el proceso. Se han expuesto dos reportes:
 
-En [CADS Test Report (sanguino.io)](http://tfm.sanguino.io/mochawesome/) están los resultados de los test E2E con screenshots y videos
-En [Cucumber Reporter (sanguino.io)](http://tfm.sanguino.io/cucumber/) está el reporte de cucumber, aporta con respecto al anterior que en el informe podemos ver los gherkin ejecutados y en caso de fallo en que punto falló.
+En [CADS Test Report (sanguino.io)](http://sanguino.cloud.okteto.net/mochawesome/) están los resultados de los test E2E con screenshots y videos
+En [Cucumber Reporter (sanguino.io)](http://sanguino.cloud.okteto.net/cucumber/) está el reporte de cucumber, aporta con respecto al anterior que en el informe podemos ver los gherkin ejecutados y en caso de fallo en que punto falló.

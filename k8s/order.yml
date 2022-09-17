@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: order-svc
-  namespace: cadsspace
+  namespace: sanguino
   labels:
     app: order
 spec:
@@ -20,7 +20,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: order
-  namespace: cadsspace
+  namespace: sanguino
 spec:
   replicas: 1
   selector:
