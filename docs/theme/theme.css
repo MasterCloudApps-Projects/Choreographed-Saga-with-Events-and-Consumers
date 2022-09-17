@@ -24,7 +24,8 @@ section.centered {
 
 
 
-section.split {
+section.split .cont {
+    margin-top: -50px;
     overflow: visible;
     display: grid;
     grid-template-columns: 500px 500px;
@@ -38,6 +39,7 @@ section.split .ldiv,
 section.split .rdiv { border:none }
 section.split .cdiv {
     grid-area: slideheading;
+    margin-top: -80px;
 }
 section.split .ldiv { grid-area: leftpanel; }
 section.split .rdiv { grid-area: rightpanel; }

@@ -40,11 +40,13 @@ Esto es un trabajo de investigación, continuación del máster
 <br />
 <!-- _class: centered -->
 
+Trabajo de investigación TFM
 Los procesos se han complicados
 Las respuestas ya no son siempre únicas
 Tenemos respuestas asincronas
-Los datos se actualizan en tiempo
-
+Los datos se actualizan en el tiempo
+No podemos tener un solo modelo de datos para front y middle
+Relaciones entre muchos squads complican el desarrollo
 
 <!-- 
 
@@ -61,20 +63,112 @@ Nos quedamos esperando hasta el infinito?
 Que hacemos cuando se actualiza un dato?
 
 -->
+---
+
+<!-- backgroundImage: url('./background.png') -->
+
+### Premisa: añadir un servicio para front
+
+Nos permitirá que los desarrolladores front reciban los datos que quieren, como quieren y cuando quieren.
+Los desarrolladores middle 
 
 ---
-<!-- backgroundImage: url('./background.png') -->
+
+
+##### Caso de uso
+
+Pedido de comida online
+
+- Realizar pedido
+
+- Responder rápido
+
+- Actualizar estado
+
+- Completar pedidos
+
+
+![bg right](./home_slide.png)
+
+<!-- 
+El front hace 1 llamada
+
+multiples respuestas
+
+diferentes momento
+--> 
+
+---
+<!-- _class: centered -->
+
+##### Caso de uso
+
+
+
+![bg width:750px](front_scrennshot.gif)
+
+<!-- los pasos happy path --> 
+
+---
+
+
+![bg left](old_pattern.drawio.png)
+
+### Antipatrones
+
+Has creado el pedido ya?
+Has creado el pedido ya?
+Has creado el pedido ya?
+Si
+Has pedido la comida ya?
+Has pedido la comida ya?
+Has pedido la comida ya?
+Si
+Has reservado un rider ya?
+Has reservado un rider ya?
+...
+ 
+<!--
+Todos hemos visto cosas parecidas...
+ --> 
+
+---
+
+### Objetivos
+
+Servicios desacoplados
+Respuestas multiples asincronas
+El middleware no se tiene que preocupar del front
+Escalables y resilientes
+Desacoplamientos de squads, no solo técnico
+
+<br>
+<br>
+<br>
+<!-- 
+Facil, no?
+Microservicios y websockets
+A quien se conecta el front?
+Se tiene que preocupar el squad del servicio de restaurantes de mandar al front un mensaje?
+--> 
+
+---
+
 
 ![bg left](saga_pattern.drawio.png)
 
 ### Patron Saga
 
-Transaccion con microservicios
+Transacción con microservicios
+Cada serivicio hace 1 transacción
+Si algo va mal rollback de todo
+
 Asegura Consistencia
-Rollback en caso de fallo
 Orquestadas / Coreografiadas
 
- 
+ <br>
+ <br>
+
 <!--
 Transaccion en MS se complican mucho
 
@@ -86,6 +180,37 @@ una muy usada, orquestacion y maquina de estados, pero acopla mucho
 
 problemas en gobierno muchos equipos en empresas grandes
 
+
+ --> 
+
+ ---
+
+
+![bg left](saga_pattern2.drawio.png)
+
+### Saga Orquestada
+
+Orquestador llama y espera
+Sencilla en procesos sincronos
+Acoplamiento de servicios
+\+ dificil resiliencia y escalabilidad
+<br/>
+
+### Saga Coreografiada
+
+Servicios reciben y envian eventos
+Desacoplamiento de servicios
+\+ facil resiliencia y escalabilidad
+<br/>
+
+ 
+<!--
+Orquestacion es acoplada y 1 unico punto de dolor
+Decide el order el orquestador
+
+Coreografiada desacoplada, control distribuido
+Orden se decide en eventos
+Gobierno de equipos es mas sencillo
 
  --> 
 ---
@@ -116,14 +241,17 @@ problemas en gobierno muchos equipos en empresas grandes
 ---
 
 <!-- _class: split -->
-
+<div class=cont>
 <div class=cdiv>
 
 ### Objetivos:
 
-Profundizar transacciones con microservicios coreografiados.
+Servicios desacoplados
+Respuestas multiples asincronas
+El middleware no se tiene que preocupar del front
+Escalables y resilientes
+Desacoplamientos de squads, no solo técnico
 
-Investigar consumidores de procesos largos con respuesta múltiple.
 </div>
 
 <div class=ldiv>
@@ -131,7 +259,7 @@ Investigar consumidores de procesos largos con respuesta múltiple.
 #### Middleware
 - servicios desacoplados
 - saga coreografiada, sin estados
-- enfocado a eventos
+- comunicacion por eventos
 - escalables y resilientes
 
 </div>
@@ -139,10 +267,11 @@ Investigar consumidores de procesos largos con respuesta múltiple.
 <div class=rdiv>
 
 #### Frontend
-- no impactar en middleware
+- pervertir patrón BFF
+- consume de los eventos
 - independiente y asíncrono
-- consuma de los eventos
 - notificaciones online / offline
+</div>
 </div>
 
 
@@ -171,56 +300,6 @@ propone un BFF consumira eventos, escucha sin molestar
 Por experiencias paadas, una transaccion en MS se complican mucho 
 
 Y todas las buenas practicas que hemos aprendido en el master --> 
-
----
-
-##### Caso de uso
-
-Pedido de comida online
-
-- Reserva de restaurante
-
-- Asignar un rider
-
-- Realizar pago
-
-- Completar pedidos
-
-
-![bg right](./home_slide.png)
-
-<!-- 
-Cada paso será un servicio 
-
-Frontal
---> 
-
----
-<!-- _class: centered -->
-
-##### Caso de uso
-
-
-
-![bg width:750px](front_scrennshot.gif)
-
-<!-- los pasos happy path --> 
-
----
-
-##### Caso de uso
-
-Cada paso un servicio
-
-Rollback en caso de fallo
-
-Informar al usuario en cada paso
-
-<!-- --> poner un grafico de saga a nivel funcional
-
-![bg left](saga.drawio.png)
-
-<!-- completada vs cancelada --> 
 
 ---
 
@@ -337,13 +416,13 @@ El contendor front lleva dentro el servicio BFF y los estáticos
 
 ## Web Sockets vs Server Sent Events vs pooling
 
-No se han encontrado grandes diferencias
+
 - En los 3 casos se queda una conexión abierta, tiempos muy similares
 - Pooling descartado por dejar 1 hilo y porque a los 30 seg se repite la petición
 - Server Sent Events es REST
 - Web Sockets permite bidireccionalidad y datos complejos
 
-> para este caso de uso SSE
+> el caso de uso esta implementado con SSE
 
 <!--   -->
 ---
@@ -394,15 +473,17 @@ Objetivos conseguidos:
 - Saga coreografiada con eventos en kafka
 - Servicios idempotentes, resilientes, escalables e independientes.
 - El frontend consume actualizaciones sin afectar a los servicios
-
-Destacable:
-
-- A priori es bastante simple poca complejidad y muy mantenible
-- BFF es fundamental para el proyecto
-- SSE, WC, Pooling no hay mucha diferencia
+- Las piezas y la arquitectura son muy simples, y muy mantenible
+- El patron BFF esta pervertido pero es fundamental
+- Los squads apenas tienen dependencias entre ellos más haya del contrato de los eventos
+- SSE gana sobre WC y Pooling, aunque por poco
 
 <!-- habria que hacer test en el BFF de recursos consumidos -->
 --- 
+## Otros casos de uso para el BFF
+
+- 
+---
 
 <!-- _class: split -->
 
