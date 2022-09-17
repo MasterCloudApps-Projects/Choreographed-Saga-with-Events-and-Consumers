@@ -1,75 +1,82 @@
 ---
 marp: true
-title: CADS - Cloud Apps Delivery System. Transacciones aisladas con sagas y eventos, y sus Consumidores
+title: Frontend vitaminized from the backend
 backgroundColor: white
 theme: cads-theme
 
 
 ---
 
-<style scoped> h6 { font-size: 25px } img { margin-top: -30px} </style> 
+<style scoped> h6 { font-size: 25px } img { margin-top: 30px} </style> 
 
 <!-- _class: centered -->
-
-![width:240px](./LogoMCA.png)
-
-<br/>
-
-### Máster en Cloud Apps
-
-
-## Saga coreografiada con eventos y consumidores
-
-
-
-
-##### Curso académico 2021/2022 
-##### Trabajo de Fin de Máster
-
-<br/>
-
-###### Autor: Miguel García Sanguino <br>Tutor: Micael Gallego Carrillo
+<!-- backgroundImage: url('./cover.png') -->
 
 <!-- titulo y me presento y tutor-->
 ---
 
-<!-- backgroundImage: url('./background.png') -->
+<!-- backgroundImage: url('./presentation_slide.png') -->
 
-
+![bg left](mediaSlideTransparente.png)
 
 ##### Miguel García Sanguino
 15 años como developer
-Frontend 80% Backend 20%
+Frontend 70% Backend 30%
 Software engineer en ING
 
 
 
-
-![bg left](./presentation_slide.png)
-
 <!-- 
-quien soy
-
-redes sociales
+Trabajo en ing, me han pagado el máster CLOUD APP
+Esto es un trabajo de investigación, continuación del máster
  -->
 ---
+<!-- backgroundImage: url('./intro_slide.png') -->
 <!-- paginate: false -->
-<!-- footer: Máster en Cloud Apps. TFM - Miguel García Sanguino -->
+<!-- footer: Frontend vitaminized from the backend - Miguel García Sanguino -->
 
-### Introducción
+
+## Frontend vitaminized from the backend
 <br />
+<!-- _class: centered -->
 
+Los procesos se han complicados
+Las respuestas ya no son siempre únicas
+Tenemos respuestas asincronas
+Los datos se actualizan en tiempo
 
-Transacciones en microservicios
-
-Patrón Saga
-
-Gobiernos de equipos con microservicios
-
-Experiencia de usuario
 
 <!-- 
-transaccion en MS se complican mucho
+
+Porque el título?
+
+Porque el título?
+
+Antes una transacción era muy simple, con MS no tanto
+
+Responder a front 1 vez? rapido pero solo parte o lenta pero completa?
+
+Nos quedamos esperando hasta el infinito?
+
+Que hacemos cuando se actualiza un dato?
+
+-->
+
+---
+<!-- backgroundImage: url('./background.png') -->
+
+![bg left](saga_pattern.drawio.png)
+
+### Patron Saga
+
+Transaccion con microservicios
+Asegura Consistencia
+Rollback en caso de fallo
+Orquestadas / Coreografiadas
+
+ 
+<!--
+Transaccion en MS se complican mucho
 
 saga es un patron asegura consistencia
 
@@ -79,7 +86,32 @@ una muy usada, orquestacion y maquina de estados, pero acopla mucho
 
 problemas en gobierno muchos equipos en empresas grandes
 
-responder a front 1 vez? rapido pero solo parte o lenta pero completa? 
+
+ --> 
+---
+
+![bg right](BFF_pattern.drawio.png)
+
+### Patron Backend for Frontend
+
+Uno por cada tipo de cliente
+Adapta el api a cada consumidor
+Simplifica clientes
+Elimina la sobrecarga de servicios
+
+ 
+<!--
+La idea es 1 por cada tipo de cliente
+
+saga es un patron asegura consistencia
+
+crea estructuras para caminos felices y marchas atras en caso de fallo
+
+una muy usada, orquestacion y maquina de estados, pero acopla mucho
+
+problemas en gobierno muchos equipos en empresas grandes
+
+
  --> 
 ---
 
