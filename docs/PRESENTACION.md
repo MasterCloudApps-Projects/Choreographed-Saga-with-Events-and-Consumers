@@ -48,6 +48,9 @@ Los datos se actualizan en el tiempo
 No podemos tener un solo modelo de datos para front y middle
 Relaciones entre muchos squads complican el desarrollo
 
+<br />
+<br />
+
 <!-- 
 
 Porque el título?
@@ -67,10 +70,14 @@ Que hacemos cuando se actualiza un dato?
 
 <!-- backgroundImage: url('./background.png') -->
 
-### Premisa: añadir un servicio para front
+### Planteamiento: añadir un servicio solo para el front
 
-Nos permitirá que los desarrolladores front reciban los datos que quieren, como quieren y cuando quieren.
-Los desarrolladores middle 
+Front recibe los datos que necesita,
+cuando los necesita,
+en el formato que los necesita,
+sin entorpecer a los desarrolladores middle, 
+ni en el modelo, 
+ni con desarrollos extra
 
 ---
 
@@ -238,6 +245,22 @@ problemas en gobierno muchos equipos en empresas grandes
 
 
  --> 
+
+---
+
+ ##### Caso de uso
+
+Cada paso un servicio
+
+Rollback en caso de fallo
+
+Informar al usuario en cada paso
+
+<!-- --> poner un grafico de saga a nivel funcional
+
+![bg left](saga.drawio.png)
+
+<!-- completada vs cancelada --> 
 ---
 
 <!-- _class: split -->
@@ -303,17 +326,68 @@ Y todas las buenas practicas que hemos aprendido en el master -->
 
 ---
 
-## Stack middleware
+## Arquitectura
+
+
+![bg right](arch_tfm.drawio.png)
+
+- ingress
+- front
+- servicios + bases de datos
+- externals ~ Mocks
+- notificaciones ~ Mocks
+- Zookeeper y kafka
+
+<!-- También están incluidos kowl y Kafka-ui -->
+---
+
+## Stack
 
 - Kubernetes
 - Kafka
-- BBDD mongo
+- Mongo DB
 - Nodejs
 - kafkajs
 - express
 - mongoose
+- Rollup como builder
+- Lit
+- Kor-ui
 
-![bg left](middle_stack.drawio.png)
+<br/>
+<br/>
+
+![bg left](full_stack.drawio.png)
+
+---
+
+## Idempotencia
+
+Marcamos el offset después de enviar la salida.
+Deben ser idempotentes:
+
+- todos los servicios de la saga
+- los servicios externos
+- los rollback de la saga
+
+![bg left](idempotente.drawio.png)
+
+<!-- 
+llevas 6 min!!!
+
+hablar de base service -->
+---
+
+
+## Estáticos y servicio juntos
+
+El contendor front lleva dentro el servicio BFF y los estáticos
+- Los desarrolla el equipo front a sus necesidades
+- Agiliza el CI/CD y el testing
+- Decide si envía online / offline
+
+![bg right](front_container.drawio.png)
+
 
 ---
 ### Flujo middleware
@@ -337,58 +411,7 @@ Orderid correlationId
 
 ---
 
-## Idempotencia
-
-Marcamos el offset después de enviar la salida.
-Deben ser idempotentes:
-
-- todos los servicios de la saga
-- los servicios externos
-- los rollback de la saga
-
-![bg left](idempotente.drawio.png)
-
-<!-- 
-llevas 6 min!!!
-
-hablar de base service -->
-
----
-## Kafka Mongo connect
-
-Pros
-- envía eventos al persistir en bbdd
-- simplifica idempotencia
-
-Cons
-- un servico más
-- obliga a tener mongo en replica set de al menos 3 instancias
-
-
-<div class=small>
-
-> Finalmente se descarta, no merece la pena
-
-</div>
-
-![bg left](arch_middle.drawio.png)
-
-<!-- --> se planteo debezium, pero se uso connect
----
-
-## Stack frontend
-
-- BFF ~= middleware
-- express: rest, WS, SSE, estáticos
-- Rollup como builder
-- Lit
-- Kor-ui
-
-![bg right](front_stack.drawio.png)
-
----
-
-### Frontend
+### Flujo Frontend
 
 - backend for frontend
 - sin bbdd
@@ -397,18 +420,6 @@ Cons
 - adapta modelos
 
 ![bg left](flow_front.drawio.png)
-
----
-
-
-## Estáticos y servicio juntos
-
-El contendor front lleva dentro el servicio BFF y los estáticos
-- Los desarrolla el equipo front a sus necesidades
-- Agiliza el CI/CD y el testing
-- Decide si envía online / offline
-
-![bg right](front_container.drawio.png)
 
 
 ---
@@ -422,24 +433,19 @@ El contendor front lleva dentro el servicio BFF y los estáticos
 - Server Sent Events es REST
 - Web Sockets permite bidireccionalidad y datos complejos
 
-> el caso de uso esta implementado con SSE
 
 <!--   -->
 ---
 
-## Arquitectura final en kubernetes
 
+<div class="white">
 
-![bg right](arch_tfm.drawio.png)
+# DEMO TIME!
 
-- ingress
-- front
-- servicios + bases de datos
-- externals ~ Mocks
-- notificaciones ~ Mocks
-- Zookeeper y kafka
+![bg](demo.jpg)
 
-<!-- También están incluidos kowl y Kafka-ui -->
+</div>
+
 ---
 
 ## E2E test
@@ -455,7 +461,7 @@ Tests con el usuario online y offline, check de notificaciones.
 
 Tests comprueban el rollback en las bbdd.
 
-> reportes: [sanguino.cloud.okteto.net](https://sanguino.cloud.okteto.net/)
+> [reportes mocha y cucumber](http://tfm.sanguino.io/)
 
 --- 
 
@@ -482,14 +488,24 @@ Objetivos conseguidos:
 --- 
 ## Otros casos de uso para el BFF
 
-- 
+- Actualizar datos cuando llegan a middleware
+  - Usuario actualiza sus datos en el momento
+  - Evita la sobrecarga del middleware
+  - Evita recargas o gestion de cache
+  - Desacoplamiento middle - frontend
+  - 
 ---
 
 <!-- _class: split -->
 
 <div class=cdiv>
 
-## Trabajos futuros
+## VENTAJAS
+
+Cada servicio pueder esta en una tecnologia u otra
+Podemos cambiar el orden de la saga cambiando los eventos
+
+## Consas malas
 
 <!-- 
 Como resumen evolucionarlo y hacerlo un proyecto "real"
@@ -507,9 +523,9 @@ Hazelcast!!
 
 <div class=ldiv>
 
-Refactor
+
 Performance conexión BFF
-Escalabilidad
+
 Testing
 CI/CD
 </div>
@@ -524,6 +540,28 @@ Escalabilidad BFF
 
 </div>
 
+
+---
+## Kafka Mongo connect
+
+Pros
+- envía eventos al persistir en bbdd
+- simplifica idempotencia
+
+Cons
+- un servico más
+- obliga a tener mongo en replica set de al menos 3 instancias
+
+
+<div class=small>
+
+> Finalmente se descarta, no merece la pena
+
+</div>
+
+![bg left](arch_middle.drawio.png)
+
+<!-- --> se planteo debezium, pero se uso connect
 ---
 
 <!-- _class: centered -->
