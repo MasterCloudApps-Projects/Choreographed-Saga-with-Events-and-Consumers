@@ -142,32 +142,11 @@ problemas en gobierno muchos equipos en empresas grandes
 ### BFF : añadir un servicio solo para el front
 
 Front recibe los datos que necesita,
-cuando los necesita,
+cuando los necesita, desde el BFF,
 en el formato que los necesita,
-sin entorpecer a los desarrolladores middle, 
-ni en el modelo, 
+sin entorpecer a middle,
+ni en el modelo,
 ni con desarrollos extra
-
-
----
-
-### Objetivos
-
-Servicios desacoplados
-Respuestas multiples asincronas
-El middleware no se tiene que preocupar del front
-Escalables y resilientes
-Desacoplamientos de squads, no solo técnico
-
-<br>
-<br>
-<br>
-<!-- 
-Facil, no?
-Microservicios y websockets
-A quien se conecta el front?
-Se tiene que preocupar el squad del servicio de restaurantes de mandar al front un mensaje?
---> 
 
 ---
 
@@ -266,6 +245,27 @@ Orden se decide en eventos
 Gobierno de equipos es mas sencillo
 
  --> 
+
+ ---
+
+### Objetivos
+
+Servicios desacoplados
+Respuestas multiples asincronas
+El middleware no se tiene que preocupar del front
+Escalables y resilientes
+Desacoplamientos de squads, no solo técnico
+
+<br>
+<br>
+<br>
+<!-- 
+Facil, no?
+Microservicios y websockets
+A quien se conecta el front?
+Se tiene que preocupar el squad del servicio de restaurantes de mandar al front un mensaje?
+--> 
+
 ---
 
 
