@@ -30,6 +30,7 @@ Software engineer en ING
 Trabajo en ing, me han pagado el máster CLOUD APP
 Esto es un trabajo de investigación, continuación del máster
  -->
+
 ---
 <!-- backgroundImage: url('./intro_slide.png') -->
 <!-- paginate: false -->
@@ -37,40 +38,98 @@ Esto es un trabajo de investigación, continuación del máster
 
 
 ## Frontend vitaminized from the backend
-<br />
-<!-- _class: centered -->
+Un front en un master de cloud apps
+¿De que hago el TFM?
 
-Trabajo de investigación TFM
-Los procesos se han complicados
-Las respuestas ya no son siempre únicas
-Tenemos respuestas asincronas
-Los datos se actualizan en el tiempo
-No podemos tener un solo modelo de datos para front y middle
-Relaciones entre muchos squads complican el desarrollo
-
-<br />
+Procesos complicados ...
+Multi respuestas ...
+Asincronia ...
+Actualizaciones ...
+Modelos de datos ...
+Relaciones entre squads ...
 <br />
 
 <!-- 
+Contar anecdota de procesos asincronos que no llegaron a hacerse y otras...
 
-Porque el título?
-
-Porque el título?
-
-Antes una transacción era muy simple, con MS no tanto
-
-Responder a front 1 vez? rapido pero solo parte o lenta pero completa?
-
-Nos quedamos esperando hasta el infinito?
-
-Que hacemos cuando se actualiza un dato?
+Contar anecdota de modelos de datos, notificaciones...
 
 -->
+
 ---
 
-<!-- backgroundImage: url('./background.png') -->
+<!-- backgroundImage: url('./background.png') --> 
+![bg center](slide_modelos.png)
 
-### Planteamiento: añadir un servicio solo para el front
+### Pains - modelos de datos
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+---
+
+![bg right](wc_update.drawio.png)
+
+Pains - respuestas asincronas
+
+- cuando un proceso depende de otra acción humana
+- Solución: comunicación servidor - cliente
+- Long pooling, WebComponents, o ServerSentEvents, servicio con complejidad extra !~ funcional
+<br/>
+---
+
+![bg left](multiple_response.drawio.png)
+
+Pains - respuestas asincronas
+
+- cuando un proceso depende de otros asincronos
+- Solución: espera? 204 y preguntar?
+- De nuevo pooling, WC o SSE, pero que servicio se queda con la conexión?
+<br/>
+---
+
+![bg right](BFF_pattern.drawio.png)
+
+### Patron Backend for Frontend
+
+Uno por cada tipo de cliente
+Adapta el api a cada consumidor
+Simplifica clientes
+Elimina la sobrecarga de servicios
+
+<br />
+
+<!--
+La idea es 1 por cada tipo de cliente
+
+saga es un patron asegura consistencia
+
+crea estructuras para caminos felices y marchas atras en caso de fallo
+
+una muy usada, orquestacion y maquina de estados, pero acopla mucho
+
+problemas en gobierno muchos equipos en empresas grandes
+
+
+ --> 
+
+---
+
+
+
+### BFF : añadir un servicio solo para el front
 
 Front recibe los datos que necesita,
 cuando los necesita,
@@ -79,65 +138,6 @@ sin entorpecer a los desarrolladores middle,
 ni en el modelo, 
 ni con desarrollos extra
 
----
-
-
-##### Caso de uso
-
-Pedido de comida online
-
-- Realizar pedido
-
-- Responder rápido
-
-- Actualizar estado
-
-- Completar pedidos
-
-
-![bg right](./home_slide.png)
-
-<!-- 
-El front hace 1 llamada
-
-multiples respuestas
-
-diferentes momento
---> 
-
----
-<!-- _class: centered -->
-
-##### Caso de uso
-
-
-
-![bg width:750px](front_scrennshot.gif)
-
-<!-- los pasos happy path --> 
-
----
-
-
-![bg left](old_pattern.drawio.png)
-
-### Antipatrones
-
-Has creado el pedido ya?
-Has creado el pedido ya?
-Has creado el pedido ya?
-Si
-Has pedido la comida ya?
-Has pedido la comida ya?
-Has pedido la comida ya?
-Si
-Has reservado un rider ya?
-Has reservado un rider ya?
-...
- 
-<!--
-Todos hemos visto cosas parecidas...
- --> 
 
 ---
 
@@ -164,14 +164,50 @@ Se tiene que preocupar el squad del servicio de restaurantes de mandar al front 
 
 ![bg left](saga_pattern.drawio.png)
 
+### Pains - transacciones
+
+Antes teniamos transacciones ACID "simples"
+
+Si tenemos multiples bases de datos? que hacermos?
+
+ <br>
+ <br>
+
+---
+
+
+![bg left](old_pattern.drawio.png)
+
+### Pains - respuesta al front
+
+Has creado el pedido ya?
+Has creado el pedido ya?
+Has creado el pedido ya?
+Si
+Has pedido la comida ya?
+Has pedido la comida ya?
+Has pedido la comida ya?
+Si
+Has reservado un rider ya?
+Has reservado un rider ya?
+...
+ 
+<!--
+Todos hemos visto cosas parecidas...
+ --> 
+
+---
+
+
+![bg left](saga_pattern.drawio.png)
+
 ### Patron Saga
 
-Transacción con microservicios
-Cada serivicio hace 1 transacción
-Si algo va mal rollback de todo
-
-Asegura Consistencia
-Orquestadas / Coreografiadas
+- Transacción en microservicios
+- 1 servicio - 1 transacción
+- Si algo va mal rollback de todo
+- Asegura Consistencia
+- Orquestadas / Coreografiadas
 
  <br>
  <br>
@@ -222,33 +258,50 @@ Gobierno de equipos es mas sencillo
  --> 
 ---
 
-![bg right](BFF_pattern.drawio.png)
 
-### Patron Backend for Frontend
+##### Caso de uso
 
-Uno por cada tipo de cliente
-Adapta el api a cada consumidor
-Simplifica clientes
-Elimina la sobrecarga de servicios
+Pedido de comida online
 
- 
-<!--
-La idea es 1 por cada tipo de cliente
+- Asincrono
 
-saga es un patron asegura consistencia
+- Depende de servicios externos
 
-crea estructuras para caminos felices y marchas atras en caso de fallo
+- Actualizaciones multiples
 
-una muy usada, orquestacion y maquina de estados, pero acopla mucho
+- Transacciones
 
-problemas en gobierno muchos equipos en empresas grandes
+- Modelos diferentes
 
 
- --> 
+![bg right](./home_slide.png)
+
+<!-- 
+El front hace 1 llamada
+
+multiples respuestas
+
+diferentes momento
+--> 
+
+---
+<!-- _class: centered -->
+
+##### Caso de uso
+
+
+
+![bg width:750px](front_scrennshot.gif)
+
+<!-- los pasos happy path --> 
 
 ---
 
+![bg left](saga.drawio.png)
+
  ##### Caso de uso
+
+Saga middleware
 
 Cada paso un servicio
 
@@ -256,9 +309,6 @@ Rollback en caso de fallo
 
 Informar al usuario en cada paso
 
-<!-- --> poner un grafico de saga a nivel funcional
-
-![bg left](saga.drawio.png)
 
 <!-- completada vs cancelada --> 
 ---
@@ -273,7 +323,7 @@ Servicios desacoplados
 Respuestas multiples asincronas
 El middleware no se tiene que preocupar del front
 Escalables y resilientes
-Desacoplamientos de squads, no solo técnico
+Squads Desacoplados, no solo técnico
 
 </div>
 
