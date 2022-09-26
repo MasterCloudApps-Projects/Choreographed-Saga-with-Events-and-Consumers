@@ -82,22 +82,29 @@ Contar anecdota de modelos de datos, notificaciones...
 
 ![bg right](wc_update.drawio.png)
 
-Pains - respuestas asincronas
+### Pains - respuestas asincronas
 
-- cuando un proceso depende de otra acción humana
-- Solución: comunicación servidor - cliente
-- Long pooling, WebComponents, o ServerSentEvents, servicio con complejidad extra !~ funcional
+Proceso depende de otra acción humana
+
+Solución: comunicación servidor - cliente
+
+Long pooling, WebComponents, o ServerSentEvents, servicio con complejidad extra !~ funcional
 <br/>
+
 ---
 
 ![bg left](multiple_response.drawio.png)
 
-Pains - respuestas asincronas
+### Pains - respuestas asincronas
 
-- cuando un proceso depende de otros asincronos
-- Solución: espera? 204 y preguntar?
-- De nuevo pooling, WC o SSE, pero que servicio se queda con la conexión?
+Proceso depende de otros asincronos
+
+Solución: espera? 204 y preguntar?
+
+De nuevo pooling, WC o SSE, pero que servicio se queda con la conexión?
+
 <br/>
+
 ---
 
 ![bg right](BFF_pattern.drawio.png)
@@ -105,8 +112,11 @@ Pains - respuestas asincronas
 ### Patron Backend for Frontend
 
 Uno por cada tipo de cliente
+
 Adapta el api a cada consumidor
+
 Simplifica clientes
+
 Elimina la sobrecarga de servicios
 
 <br />
@@ -311,6 +321,20 @@ Informar al usuario en cada paso
 
 
 <!-- completada vs cancelada --> 
+
+---
+
+![bg left](sagaConBFF.drawio.png)
+
+ ##### Caso de uso
+
+BFF consume los mismo eventos
+
+Cada paso el BFF informa al front
+
+Middleware no hace nada especial
+
+<!-- completada vs cancelada --> 
 ---
 
 <!-- _class: split -->
@@ -429,7 +453,7 @@ hablar de base service -->
 ---
 
 
-## Estáticos y servicio juntos
+## Estáticos y BFF juntos
 
 El contendor front lleva dentro el servicio BFF y los estáticos
 - Los desarrolla el equipo front a sus necesidades
@@ -498,6 +522,20 @@ Orderid correlationId
 
 ---
 
+## Escalabilidad y resiliencia
+
+![bg right](./escalaResiliencia.drawio.png)
+
+Servicios idempotentes, 1 evento 1 instancia.
+
+BFF 1 usuario 1 instancia, 1 evento a todas las instancias.
+
+Si instancia cae, front reconecta
+
+Fallback con notificaciones
+
+---
+
 ## E2E test
 
 ![bg left](./e2e_slide.png)
@@ -552,23 +590,11 @@ Objetivos conseguidos:
 
 ## VENTAJAS
 
-Cada servicio pueder esta en una tecnologia u otra
+Cada servicio puede esta en una tecnologia u otra
 Podemos cambiar el orden de la saga cambiando los eventos
 
-## Consas malas
+## Inconvientes
 
-<!-- 
-Como resumen evolucionarlo y hacerlo un proyecto "real"
-
-Performance tests de la conexión asíncrona
-
-• En qué casos se bloquean hilos y en cuáles no.
-• Cuál consume más recursos.
-• Cuántas conexiones en paralelo puede soportar.
-
-Escalabilidad BFF importante si un usiaro esta en una instancia y llega el evento a otra, que hacemos?
-Hazelcast!!
- -->
 </div>
 
 <div class=ldiv>
@@ -590,28 +616,6 @@ Escalabilidad BFF
 
 </div>
 
-
----
-## Kafka Mongo connect
-
-Pros
-- envía eventos al persistir en bbdd
-- simplifica idempotencia
-
-Cons
-- un servico más
-- obliga a tener mongo en replica set de al menos 3 instancias
-
-
-<div class=small>
-
-> Finalmente se descarta, no merece la pena
-
-</div>
-
-![bg left](arch_middle.drawio.png)
-
-<!-- --> se planteo debezium, pero se uso connect
 ---
 
 <!-- _class: centered -->
@@ -625,4 +629,33 @@ Cons
 <br />
 
 ## GRACIAS!
+
+---
+
+---
+### Kafka Mongo connect
+
+#### Pros
+
+envía eventos al persistir en bbdd
+
+simplifica idempotencia
+
+#### Cons
+un servico más
+
+obliga a tener mongo en replica set de al menos 3 instancias
+
+
+<div class=small>
+
+> Finalmente se descarta, no merece la pena
+
+</div>
+
+<br>
+
+![bg left](arch_middle.drawio.png)
+
+<!-- --> se planteo debezium, pero se uso connect
 
