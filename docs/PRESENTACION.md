@@ -1,5 +1,5 @@
 ---
-marp: true
+marp: false
 title: Frontend vitaminized from the backend
 backgroundColor: white
 theme: cads-theme
@@ -38,8 +38,7 @@ Esto es un trabajo de investigación, continuación del máster
 
 
 ## Frontend vitaminized from the backend
-Un front en un master de cloud apps
-¿De que hago el TFM?
+Un front en un master de cloud apps ¿De que hago el TFM?
 
 Procesos complicados ...
 Multi respuestas ...
@@ -48,6 +47,7 @@ Actualizaciones ...
 Modelos de datos ...
 Relaciones entre squads ...
 <br />
+Trabajo de investigación
 
 <!-- 
 Contar anecdota de procesos asincronos que no llegaron a hacerse y otras...
@@ -576,45 +576,12 @@ Objetivos conseguidos:
 --- 
 ## Otros casos de uso para el BFF
 
-- Actualizar datos cuando llegan a middleware
+- Actualizar datos cuando llegan, tanto eventos como en bbdd
   - Usuario actualiza sus datos en el momento
   - Evita la sobrecarga del middleware
   - Evita recargas o gestion de cache
   - Desacoplamiento middle - frontend
-  - 
----
 
-<!-- _class: split -->
-
-<div class=cdiv>
-
-## VENTAJAS
-
-Cada servicio puede esta en una tecnologia u otra
-Podemos cambiar el orden de la saga cambiando los eventos
-
-## Inconvientes
-
-</div>
-
-<div class=ldiv>
-
-
-Performance conexión BFF
-
-Testing
-CI/CD
-</div>
-
-<div class=rdiv>
-
-Observabilidad
-Seguridad
-Conciliaciones
-Frontend – UX
-Escalabilidad BFF
-
-</div>
 
 ---
 
