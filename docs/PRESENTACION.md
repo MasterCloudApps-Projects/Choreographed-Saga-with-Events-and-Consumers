@@ -74,6 +74,7 @@ Contar anecdota de modelos de datos, notificaciones...
 <br/>
 <br/>
 <br/>
+30% del código en parsers y adaptadores
 <br/>
 <br/>
 <br/>
@@ -88,7 +89,9 @@ Proceso depende de otra acción humana
 
 Solución: comunicación servidor - cliente
 
-Long pooling, WebntsSockets, o ServerSentEvents, servicio con complejidad extra !~ funcional
+Long pooling, WebSockets, o ServerSentEvents, 
+
+Servicio con complejidad extra !~ funcional, asume un protocolo extra y responsabilidad
 <br/>
 
 ---
@@ -101,7 +104,7 @@ Proceso depende de otros asíncronos
 
 Solución: ¿espera? ¿204 y preguntar?
 
-De nuevo pooling, WS o SSE, pero ¿qué servicio se queda con la conexión?
+De nuevo pooling, WS o SSE, pero ¿qué servicio se queda con la conexión? El último no tendría que tener conexión con front...
 
 <br/>
 
@@ -113,11 +116,11 @@ De nuevo pooling, WS o SSE, pero ¿qué servicio se queda con la conexión?
 
 Uno por cada tipo de cliente
 
-Adapta el API a cada consumidor
+Adapta el API a cada consumidor (rest, graphQL, etc)
 
-Simplifica clientes
+Composición de servicios
 
-Elimina la sobrecarga de servicios
+Desacopla servicios
 
 <br />
 
@@ -148,6 +151,8 @@ sin entorpecer a middle,
 ni en el modelo,
 ni con desarrollos extra
 
+Nos ayudará a resolver nuestros pains
+
 ---
 
 
@@ -157,33 +162,10 @@ ni con desarrollos extra
 
 Antes teníamos transacciones ACID "simples"
 
-Si tenemos múltiples bases de datos, ¿qué hacemos?
+Con microservicios, tenemos múltiples bases de datos, ¿qué hacemos?
 
  <br>
  <br>
-
----
-
-
-![bg left](old_pattern.drawio.png)
-
-### Pains - respuesta al front
-
-¿Has creado el pedido ya?
-¿Has creado el pedido ya?
-¿Has creado el pedido ya?
-Sí
-¿Has pedido la comida ya?
-¿Has pedido la comida ya?
-¿Has pedido la comida ya?
-Sí
-¿Has reservado un rider ya?
-¿Has reservado un rider ya?
-...
- 
-<!--
-Todos hemos visto cosas parecidas...
- --> 
 
 ---
 
@@ -197,7 +179,7 @@ Todos hemos visto cosas parecidas...
 - Si algo va mal, rollback de todo
 - Asegura Consistencia
 - Orquestadas / Coreografiadas
-
+  (cómo avanzamos o hacemos rollback)
  <br>
  <br>
 
@@ -255,6 +237,12 @@ Respuestas múltiples asíncronas
 El middleware no se tiene que preocupar del front
 Escalables y resilientes
 Desacoplamientos de squads, no solo técnico
+
+- mejorar la experiencia de usuario
+- mejorar la experiencia de desarrollo
+- mejorar y simplificar front y middle
+
+**Buscamos caso de uso que cumpla todo**
 
 <br>
 <br>
@@ -317,7 +305,7 @@ Cada paso un servicio
 
 Rollback en caso de fallo
 
-Informar al usuario en cada paso
+**Informar al usuario en cada paso**
 
 
 <!-- completada vs cancelada --> 
@@ -565,22 +553,26 @@ Tests comprueban el rollback en las bbdd.
 Objetivos conseguidos:
 
 - Saga coreografiada con eventos en kafka
-- Servicios idempotentes, resilientes, escalables e independientes.
+- Servicios idempotentes, resilientes, escalables e independientes
 - El frontend consume actualizaciones sin afectar a los servicios
 - Las piezas y la arquitectura son muy simples, y muy mantenible
 - El patrón BFF esta pervertido pero es fundamental
 - Los squads apenas tienen dependencias entre ellos más allá del contrato de los eventos
 - SSE gana sobre WS y Pooling, aunque por poco
+- Que los frontenders desarrollen servicios propios es buena idea
 
 <!-- habria que hacer test en el BFF de recursos consumidos -->
 --- 
 ## Otros casos de uso para el BFF
-
+- Transacciones
 - Actualizar datos cuando llegan, tanto eventos como en bbdd
   - Usuario actualiza sus datos en el momento
   - Evita la sobrecarga del middleware
   - Evita recargas o gestión de caché
-  - Desacoplamiento middle - frontend
+- Updates datos multiusuario-clientes
+  - Un estado sincronizado con múltiples clientes
+  - Apss de restaurantes y Riders, por ejemplo
+- Desacoplamiento middle - frontend
 
 
 ---
