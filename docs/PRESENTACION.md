@@ -38,11 +38,11 @@ Esto es un trabajo de investigación, continuación del máster
 
 
 ## Frontend vitaminized from the backend
-Un front en un master de cloud apps ¿De que hago el TFM?
+Un front en un máster de Cloud Apps ¿De qué hago el TFM?
 
 Procesos complicados ...
 Multi respuestas ...
-Asincronia ...
+Asincronía ...
 Actualizaciones ...
 Modelos de datos ...
 Relaciones entre squads ...
@@ -82,26 +82,26 @@ Contar anecdota de modelos de datos, notificaciones...
 
 ![bg right](wc_update.drawio.png)
 
-### Pains - respuestas asincronas
+### Pains - respuestas asíncronas
 
 Proceso depende de otra acción humana
 
 Solución: comunicación servidor - cliente
 
-Long pooling, WebComponents, o ServerSentEvents, servicio con complejidad extra !~ funcional
+Long pooling, WebntsSockets, o ServerSentEvents, servicio con complejidad extra !~ funcional
 <br/>
 
 ---
 
 ![bg left](multiple_response.drawio.png)
 
-### Pains - respuestas asincronas
+### Pains - respuestas asíncronas
 
-Proceso depende de otros asincronos
+Proceso depende de otros asíncronos
 
-Solución: espera? 204 y preguntar?
+Solución: ¿espera? ¿204 y preguntar?
 
-De nuevo pooling, WC o SSE, pero que servicio se queda con la conexión?
+De nuevo pooling, WS o SSE, pero ¿qué servicio se queda con la conexión?
 
 <br/>
 
@@ -109,11 +109,11 @@ De nuevo pooling, WC o SSE, pero que servicio se queda con la conexión?
 
 ![bg right](BFF_pattern.drawio.png)
 
-### Patron Backend for Frontend
+### Patrón Backend for Frontend
 
 Uno por cada tipo de cliente
 
-Adapta el api a cada consumidor
+Adapta el API a cada consumidor
 
 Simplifica clientes
 
@@ -155,9 +155,9 @@ ni con desarrollos extra
 
 ### Pains - transacciones
 
-Antes teniamos transacciones ACID "simples"
+Antes teníamos transacciones ACID "simples"
 
-Si tenemos multiples bases de datos? que hacermos?
+Si tenemos múltiples bases de datos, ¿qué hacemos?
 
  <br>
  <br>
@@ -169,16 +169,16 @@ Si tenemos multiples bases de datos? que hacermos?
 
 ### Pains - respuesta al front
 
-Has creado el pedido ya?
-Has creado el pedido ya?
-Has creado el pedido ya?
-Si
-Has pedido la comida ya?
-Has pedido la comida ya?
-Has pedido la comida ya?
-Si
-Has reservado un rider ya?
-Has reservado un rider ya?
+¿Has creado el pedido ya?
+¿Has creado el pedido ya?
+¿Has creado el pedido ya?
+Sí
+¿Has pedido la comida ya?
+¿Has pedido la comida ya?
+¿Has pedido la comida ya?
+Sí
+¿Has reservado un rider ya?
+¿Has reservado un rider ya?
 ...
  
 <!--
@@ -190,11 +190,11 @@ Todos hemos visto cosas parecidas...
 
 ![bg left](saga_pattern.drawio.png)
 
-### Patron Saga
+### Patrón Saga
 
 - Transacción en microservicios
 - 1 servicio - 1 transacción
-- Si algo va mal rollback de todo
+- Si algo va mal, rollback de todo
 - Asegura Consistencia
 - Orquestadas / Coreografiadas
 
@@ -223,16 +223,16 @@ problemas en gobierno muchos equipos en empresas grandes
 ### Saga Orquestada
 
 Orquestador llama y espera
-Sencilla en procesos sincronos
+Sencilla en procesos síncronos
 Acoplamiento de servicios
-\+ dificil resiliencia y escalabilidad
+\+ difícil resiliencia y escalabilidad
 <br/>
 
 ### Saga Coreografiada
 
 Servicios reciben y envian eventos
 Desacoplamiento de servicios
-\+ facil resiliencia y escalabilidad
+\+ fácil resiliencia y escalabilidad
 <br/>
 
  
@@ -251,7 +251,7 @@ Gobierno de equipos es mas sencillo
 ### Objetivos
 
 Servicios desacoplados
-Respuestas multiples asincronas
+Respuestas múltiples asíncronas
 El middleware no se tiene que preocupar del front
 Escalables y resilientes
 Desacoplamientos de squads, no solo técnico
@@ -273,11 +273,11 @@ Se tiene que preocupar el squad del servicio de restaurantes de mandar al front 
 
 Pedido de comida online
 
-- Asincrono
+- Asíncrono
 
 - Depende de servicios externos
 
-- Actualizaciones multiples
+- Actualizaciones múltiples
 
 - Transacciones
 
@@ -328,7 +328,7 @@ Informar al usuario en cada paso
 
  ##### Caso de uso
 
-BFF consume los mismo eventos
+BFF consume los mismos eventos
 
 Cada paso el BFF informa al front
 
@@ -344,7 +344,7 @@ Middleware no hace nada especial
 ### Objetivos:
 
 Servicios desacoplados
-Respuestas multiples asincronas
+Respuestas múltiples asíncronas
 El middleware no se tiene que preocupar del front
 Escalables y resilientes
 Squads Desacoplados, no solo técnico
@@ -356,7 +356,7 @@ Squads Desacoplados, no solo técnico
 #### Middleware
 - servicios desacoplados
 - saga coreografiada, sin estados
-- comunicacion por eventos
+- comunicación por eventos
 - escalables y resilientes
 
 </div>
@@ -542,7 +542,7 @@ Fallback con notificaciones
 
 Test E2E en cypress con gherkin.
 
-Cada test configura el api externals: tiempo y response code
+Cada test configura el API externals: tiempo y response code
 (banco, restaurante, rider).
 
 Tests con el usuario online y offline, check de notificaciones.
@@ -554,7 +554,7 @@ Tests comprueban el rollback en las bbdd.
 --- 
 
 <!-- _class: centered -->
-## E2E test video
+## E2E test vídeo
 <video width="83%" controls autoplay>
     <source src="e2e.mp4" type="video/mp4">
 </video>
@@ -568,9 +568,9 @@ Objetivos conseguidos:
 - Servicios idempotentes, resilientes, escalables e independientes.
 - El frontend consume actualizaciones sin afectar a los servicios
 - Las piezas y la arquitectura son muy simples, y muy mantenible
-- El patron BFF esta pervertido pero es fundamental
-- Los squads apenas tienen dependencias entre ellos más haya del contrato de los eventos
-- SSE gana sobre WC y Pooling, aunque por poco
+- El patrón BFF esta pervertido pero es fundamental
+- Los squads apenas tienen dependencias entre ellos más allá del contrato de los eventos
+- SSE gana sobre WS y Pooling, aunque por poco
 
 <!-- habria que hacer test en el BFF de recursos consumidos -->
 --- 
@@ -579,7 +579,7 @@ Objetivos conseguidos:
 - Actualizar datos cuando llegan, tanto eventos como en bbdd
   - Usuario actualiza sus datos en el momento
   - Evita la sobrecarga del middleware
-  - Evita recargas o gestion de cache
+  - Evita recargas o gestión de caché
   - Desacoplamiento middle - frontend
 
 
