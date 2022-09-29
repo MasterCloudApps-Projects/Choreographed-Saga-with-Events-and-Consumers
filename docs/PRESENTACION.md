@@ -539,6 +539,8 @@ Tests comprueban el rollback en las bbdd.
 
 > [reportes mocha y cucumber](http://tfm.sanguino.io/)
 
+<br>
+
 --- 
 
 <!-- _class: centered -->
@@ -546,6 +548,7 @@ Tests comprueban el rollback en las bbdd.
 <video width="83%" controls autoplay>
     <source src="e2e.mp4" type="video/mp4">
 </video>
+<br>
 
 ---
 
@@ -560,6 +563,7 @@ Objetivos conseguidos:
 - Los squads apenas tienen dependencias entre ellos más allá del contrato de los eventos
 - SSE gana sobre WS y Pooling, aunque por poco
 - Que los frontenders desarrollen servicios propios es buena idea
+<br>
 
 <!-- habria que hacer test en el BFF de recursos consumidos -->
 --- 
@@ -573,7 +577,7 @@ Objetivos conseguidos:
   - Un estado sincronizado con múltiples clientes
   - Apss de restaurantes y Riders, por ejemplo
 - Desacoplamiento middle - frontend
-
+<br>
 
 ---
 
